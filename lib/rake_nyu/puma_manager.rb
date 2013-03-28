@@ -7,29 +7,29 @@ module RakeNyu
 
     # Start the puma web server on the given port
     def self.start(port)
-      c = puma_config(port)
-      exec c.start_cmd
+      config = puma_config(port)
+      exec config.start_cmd
     end
 
     # Restart the puma web server on the given port
     def self.restart(port)
-      c = puma_config(port)
-      exec c.restart_cmd
+      config = puma_config(port)
+      exec config.restart_cmd
     end
 
     # Stop the puma web server on the given port
     def self.stop(port)
-      c = puma_config(port)
-      exec c.stop_cmd
+      config = puma_config(port)
+      exec config.stop_cmd
     end
 
     # Write the start and restart scripts to files
     # Does not overwrite if the files exist
     def self.write_scripts(port)
-      c = puma_config(port)
-      make_scripts_dir(c)
-      write_start_script(c)
-      write_restart_script(c)
+      config = puma_config(port)
+      make_scripts_dir(config)
+      write_start_script(config)
+      write_restart_script(config)
     end
 
     # Write the start script to a file
