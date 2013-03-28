@@ -1,37 +1,42 @@
 namespace :nyu do
   namespace :newrelic do
-      # If we're in the Rails environment, use Rails initializers
-      if defined?(::Rails) && ::Rails.version >= '3.1.0'
-        Rake::Task[:environment].invoke
-      elsif (not args[:config_file].empty?)
-        Rake::Task['exlibris:aleph:initialize_via_config_file'].invoke(args[:config_file])
-      elsif (not args[:tab_path].empty?) and (not args[:adms].empty?)
-        Rake::Task['exlibris:aleph:initialize_via_args'].invoke(args[:tab_path],  args[:yml_path], args[:adms])
-      else
-        raise Rake::TaskArgumentError.new("Insufficient arguments.")
-      end
-      p "Configured tab path: #{Exlibris::Aleph::TabHelper.tab_path}"
-      p "Configured yml path: #{Exlibris::Aleph::TabHelper.yml_path}"
-      p "Configured ADMs: #{Exlibris::Aleph::TabHelper.adms}"
+    desc "Set the New Relic file with ERB parsed"
+    task :set => :backup  do |task|\
+      # Load up the Rails environment
+      Rake::Task[:environment].invoke
+      RakeNyu::NewRelicManager.rewrite_with_settings
+    end
+
+    desc "Backup the New Relic file"
+    task :backup do |task|
+      RakeNyu::NewRelicManager.backup_original
+    end
+
+    desc "Reset the New Relic file"
+    task :reset do |task|
+      RakeNyu::NewRelicManager.reset_original
     end
   end
+
   namespace :puma do
-    desc "Start the puma web server on the given port."
-    task :start, :port, :shared_path do |task, args|
-      port = args[:port]
-      shared_path = args[:shared_path]
+    desc "Start the puma web server on the given port"
+    task :start, [:port] => :write_scripts do |task, args|
+      RakeNyu::PumaManager.start(args[:port])
     end
 
-    desc "Retart the puma web server on the given port."
-    task :restart, :port, :shared_path do |task, args|
-      port = args[:port]
-      shared_path = args[:shared_path]
+    desc "Retart the puma web server on the given port"
+    task :restart, [:port] => :write_scripts do |task, args|
+      RakeNyu::PumaManager.restart(args[:port])
     end
 
-    desc "Stop the puma web server on the given port."
-    task :stop, :port, :shared_path do |task, args|
-      port = args[:port]
-      shared_path = args[:shared_path]
+    desc "Stop the puma web server on the given port"
+    task :stop, :port do |task, args|
+      RakeNyu::PumaManager.stop(args[:port])
+    end
+
+    desc "Write the start and restart scripts to files. Does not overwrite if the files exist"
+    task :write_scripts, :port do |task, args|
+      RakeNyu::PumaManager.write_scripts(args[:port])
     end
   end
 end
