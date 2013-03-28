@@ -37,7 +37,7 @@ module RakeNyu
 
     # Stop command
     def stop_cmd
-      @stop_cmd ||= "kill -9 \\`cat #{pid}\\` && rm -rf #{pid} && echo 'Stopping..' >> #{log}"
+      @stop_cmd ||= "kill -9 `cat #{pid}` && rm -rf #{pid} && echo 'Stopping..' >> #{log}"
     end
 
     # Restart command
