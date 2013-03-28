@@ -49,8 +49,8 @@ module RakeNyu
     def start_script
       @start_script ||= %Q(
         #!/bin/bash
-        puma -b #{bind} -e #{Rails.env} -t 2:4 --pidfile #{pid} >> #{log} 2>&1 &;
-        exit;
+        puma -b #{bind} -e #{Rails.env} -t 2:4 --pidfile #{pid} >> #{log} 2>&1 &
+        exit
       ).strip
     end
 
@@ -59,10 +59,10 @@ module RakeNyu
       @restart_script ||= %Q(
         #!/bin/bash
         if [ -a #{pid} ]; then
-          #{stop_cmd};
+          #{stop_cmd}
         fi
-        #{start_cmd};
-        exit;
+        #{start_cmd}
+        exit
       ).strip
     end
   end
