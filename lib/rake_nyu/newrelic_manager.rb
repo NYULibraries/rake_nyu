@@ -17,6 +17,8 @@ module RakeNyu
 
     # Rewrite the new relic file to include the rails config settings
     def self.rewrite_with_settings
+      # Get the yaml before opening the file
+      yaml = yaml_with_erb_parsed
       File.open(newrelic_file, "w") { |f| f.write(yaml) }
     end
 
@@ -26,8 +28,8 @@ module RakeNyu
     end
 
     # ERB'd YAML with ERB parsed
-    def self.yaml
-      @yaml ||= ERB.new(File.read(newrelic_file)).result.to_yaml
+    def self.yaml_with_erb_parsed
+      @yaml ||= YAML.load(ERB.new(File.read(newrelic_file)).result).to_yaml
     end
   end
 end

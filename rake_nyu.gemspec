@@ -19,4 +19,5 @@ Gem::Specification.new do |s|
   s.add_dependency "require_all", "~> 1.2.1"
   s.add_development_dependency "rails", "~> 3.2.13"
   s.add_development_dependency "rspec", "~> 2.13.0"
+  s.add_development_dependency "rails_config", "~> 0.3.2"
 end
