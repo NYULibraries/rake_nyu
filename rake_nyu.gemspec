@@ -17,7 +17,15 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rake", "~> 10.0.4"
   s.add_dependency "require_all", "~> 1.2.1"
-  s.add_development_dependency "rails", "~> 3.2.13"
+  s.add_dependency "rails", "~> 3.2.13"
   s.add_development_dependency "rspec", "~> 2.13.0"
-  s.add_development_dependency "rails_config", "~> 0.3.2"
+  
+  s.add_dependency "cap_git_tools", "~> 0.9.1"
+  s.add_dependency "git", "~> 1.2.5"
+  s.add_dependency "capistrano-tagging", "~> 0.1.0"
+  s.add_dependency "mail", "~> 2.5.4"
+  s.add_dependency "octokit", "~> 1.25.0"
+  s.add_dependency "rails_config", "~> 0.3.2"
+  s.add_dependency "capistrano", "~> 2.15.5"
+  s.add_dependency "rvm-capistrano", "~> 1.4.0"
 end
