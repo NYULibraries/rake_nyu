@@ -1,3 +1,5 @@
+require 'capistrano'
+
 require_relative 'assets'
 require_relative 'cache'
 require_relative 'rails-config'

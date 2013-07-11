@@ -1,5 +1,3 @@
-require 'capistrano'
-
 Capistrano::Configuration.instance(:must_exist).load do
   # Cleanup old deploys and set passenger symbolic link
   after "deploy", "deploy:cleanup", "deploy:passenger_symlink"

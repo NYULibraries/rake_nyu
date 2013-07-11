@@ -1,4 +1,3 @@
-require 'capistrano'
 require 'git'
 require 'octokit'
 require 'mail'

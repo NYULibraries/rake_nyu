@@ -1,4 +1,3 @@
-require 'capistrano'
 # Multistage
 require 'capistrano/ext/multistage'
 # Include New Relic recipes

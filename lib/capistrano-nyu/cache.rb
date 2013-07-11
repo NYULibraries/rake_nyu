@@ -1,5 +1,3 @@
-require 'capistrano'
-
 Capistrano::Configuration.instance(:must_exist).load do
   after "deploy", "deploy:cleanup", "cache:tmp_clear"
   

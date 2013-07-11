@@ -1,4 +1,3 @@
-require 'capistrano'
 require "bundler/capistrano"
 # Load rvm-capistrano gem
 require "rvm/capistrano"
