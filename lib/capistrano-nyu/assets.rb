@@ -4,6 +4,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   
   namespace :deploy do
     namespace :assets do
+      desc "Precompiles if assets have been changed"
       task :precompile, :roles => :web, :except => { :no_release => true } do
         from = source.next_revision(current_revision) rescue nil
         if from.nil? || capture("cd #{fetch :current_release} && #{source.local.log(from)} vendor/assets/ lib/assets/app/assets/ | wc -l").to_i > 0
@@ -18,6 +19,7 @@ Capistrano::Configuration.instance(:must_exist).load do
         end
       end
 
+      desc "Creates a symlink for assets"
       task :symlink, roles: :web do
         run ("rm -rf #{fetch :current_release}/public/assets &&
               mkdir -p #{fetch :current_release}/public &&

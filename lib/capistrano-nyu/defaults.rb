@@ -1,10 +1,10 @@
 # Including Capistrano Tagging recipes
 require 'capistrano/tagging'
 Capistrano::Configuration.instance(:must_exist).load do
+  # SSH options
   set :ssh_options, {:forward_agent => true}
   
   # Git vars
-  
   set :scm, :git
   set :deploy_via, :remote_cache
   set(:branch, 'development') unless exists?(:branch)

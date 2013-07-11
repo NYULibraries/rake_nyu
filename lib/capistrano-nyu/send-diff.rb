@@ -8,10 +8,11 @@ Capistrano::Configuration.instance(:must_exist).load do
   before  "diff:mail_setup",  "diff:get_diff"
   
   namespace :diff do
-    desc "Prints out git diff"
+    desc "Gets git diff"
     task :get_diff do
       begin
         set :git_diff, Octokit.commits("#{fetch :repository}".scan(/:(.?*).git/).last.first, "#{fetch :branch}").first.html_url
+        puts "Getting diff from #{fetch(:repository).scan(/:(.?*).git/).last.first} on branch #{fetch :branch}"
       rescue
         git = Git.open(Dir.pwd.to_s)
         commits = Array.new
@@ -19,7 +20,8 @@ Capistrano::Configuration.instance(:must_exist).load do
         set :git_diff, git.diff(commits.first(2).last, commits.first(2).first).to_s
       end
     end
-      
+    
+    desc "Sends git diff"
     task :send_diff do
       body_message = fetch :git_diff
       mail = Mail.new do
@@ -31,6 +33,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       mail.deliver! unless mail[:to].to_s.empty?
     end
     
+    desc "Sets up settings for mail"
     task :mail_setup do
       Mail.defaults do
         delivery_method :smtp, { 
