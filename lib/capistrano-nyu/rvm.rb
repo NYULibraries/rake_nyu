@@ -12,6 +12,9 @@ Capistrano::Configuration.instance(:must_exist).load do
   set :rvm_ruby_string, fetch(:rvm_ruby_string, "ruby-1.9-p448")
   set :rvm_type, :user
   
+  # Rails specific vars
+  set :normalize_asset_timestamps, false
+  
   # Bundler vars
   set :bundle_without, [:development, :test]
 end
