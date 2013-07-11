@@ -15,4 +15,6 @@ Capistrano::Configuration.instance(:must_exist).load do
   set :default_stage, "staging"
   set :keep_releases, 5
   set :use_sudo, false
+  
+  set(:application) {"#{fetch :app_title}_repos"}
 end
