@@ -17,4 +17,5 @@ Capistrano::Configuration.instance(:must_exist).load do
   set :use_sudo, false
   
   set(:application) {"#{fetch :app_title}_repos"}
+  set(:repository) {"git@github.com:NYULibraries/#{fetch :app_title}.git"}
 end
