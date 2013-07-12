@@ -2,7 +2,7 @@
 require 'capistrano'
 
 # The default attributes get set here.
-require_relative 'defaults'
+require_relative 'default_attributes'
 # This loads a recipe for precompiling assets, this specific one only precompiles if there are any changes.
 require_relative 'assets'
 # This recipe clears the cache.
