@@ -9,7 +9,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   after   "bundle:install", "deploy:migrate"
   
   # RVM  vars
-  set :rvm_ruby_string, fetch(:rvm_ruby_string, "ruby-1.9-p448")
+  set :rvm_ruby_string, fetch(:rvm_ruby_string, "ruby-1.9.3-p448")
   set :rvm_type, :user
   
   # Rails specific vars
