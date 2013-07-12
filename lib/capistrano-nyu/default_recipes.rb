@@ -8,7 +8,7 @@ require_relative 'assets'
 # This recipe clears the cache.
 require_relative 'cache'
 # The rails config recipe loads up all our application specific settings from a settings.yaml
-require_relative 'rails-config'
+require_relative 'rails_config'
 # This recipe sends the git diff between two commits.
 require_relative 'send-diff'
 # The rvm recipe sets up an rvm environment with ruby.

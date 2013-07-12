@@ -17,7 +17,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       run "cd #{current_path}"
     end
     task :passenger_symlink do
-      run "rm -rf #{:app_dir}/#{fetch :app_title} && ln -s #{current_path}/public #{:app_dir}/#{fetch :app_title}"
+      run "rm -rf #{app_dir}/#{fetch :app_title} && ln -s #{current_path}/public #{app_dir}/#{fetch :app_title}"
     end
   end
 end
