@@ -2,20 +2,18 @@
 require 'capistrano/tagging'
 Capistrano::Configuration.instance(:must_exist).load do
   before 'tagging:deploy', 'tagging:checkout_branch'
-  after 'tagging:deploy', 'tagging:return_to_deploy'
   namespace :tagging do
     task :checkout_branch do
-      run "cd #{current_release} && git checkout #{revision}; true" do |channel, stream, data|
-        if stream.eql? :err
+      run "cd #{current_release} && git branch; true" do |channel, stream, data|
+        data.gsub!(/\**[^\S\n]+/, "")
+        if !data.split("\n").include? "#{revision}"
           run "cd #{current_release} && git checkout -b #{revision}; true"
+          run "cd #{current_release} && git checkout deploy; true"
         end
       end
     end
-    
-    task :return_to_deploy do
-      run "cd #{current_release} && git checkout deploy; true"
-    end
   end
+  
   # SSH options
   set :ssh_options, {:forward_agent => true}
   
