@@ -6,3 +6,4 @@ source "http://rubygems.org"
 gemspec
 gem "coveralls", "~> 0.6.0", require: false, :group => :test
 gem "debugger", "~> 1.5.0", :group => [:development, :test], :platform => :mri
+gem "capistrano-tagging", :git => 'git@github.com:hab278/capistrano-tagging.git', :branch => "master"
