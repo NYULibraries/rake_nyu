@@ -8,7 +8,6 @@ Capistrano::Configuration.instance(:must_exist).load do
         data.gsub!(/\**[^\S\n]+/, "")
         if !data.split("\n").include? "#{revision}"
           run_locally "git checkout -b #{revision}; true"
-          run_locally "git checkout deploy; true"
         end
       end
     end
