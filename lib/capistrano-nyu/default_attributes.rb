@@ -7,8 +7,8 @@ Capistrano::Configuration.instance(:must_exist).load do
       run "cd #{current_release} && git branch; true" do |channel, stream, data|
         data.gsub!(/\**[^\S\n]+/, "")
         if !data.split("\n").include? "#{revision}"
-          run "cd #{current_release} && git checkout -b #{revision}; true"
-          run "cd #{current_release} && git checkout deploy; true"
+          run_locally "git checkout -b #{revision}; true"
+          run_locally "git checkout deploy; true"
         end
       end
     end
