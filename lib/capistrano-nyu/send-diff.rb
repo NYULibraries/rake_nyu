@@ -16,7 +16,12 @@ Capistrano::Configuration.instance(:must_exist).load do
         if tags.count > 1
           to = tags.last
           from = tags[tags.count-2]
-          set :git_diff, "https://www.github.com/#{repo_name}/compare/#{from.commit.sha}...#{to.commit.sha}"
+          git_link = "https://www.github.com/#{repo_name}/compare/#{from.commit.sha}...#{to.commit.sha}"
+          run "curl -i http://git.io -F \"url=#{git_link}\"" do |channel, stream, data|
+            if data.include? "Location:"
+              set :git_diff, data.gsub(/Location:\s+/, "")
+            end
+          end
         end
       rescue
         git = Git.open(Dir.pwd.to_s)
