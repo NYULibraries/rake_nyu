@@ -15,7 +15,7 @@ Capistrano::Configuration.instance(:must_exist).load do
         tags = Octokit.tags(repo_name)
         if tags.count > 1
           to = tags.last
-          from = tags[arr.count-2]
+          from = tags[tags.count-2]
           set :git_diff, "https://www.github.com/#{repo_name}/compare/#{from.commit.sha}...#{to.commit.sha}"
         end
       rescue
