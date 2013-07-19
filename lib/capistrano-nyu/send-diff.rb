@@ -28,7 +28,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     
     desc "Sends git diff"
     task :send_diff do
-      body_message = fetch(:git_diff, "No changes in #{fetch(:app_title, 'this project')}"
+      body_message = fetch(:git_diff, "No changes in #{fetch(:app_title, 'this project')}")
       mail = Mail.new do
         from    'capistrano@library.nyu.edu'
         body    body_message
