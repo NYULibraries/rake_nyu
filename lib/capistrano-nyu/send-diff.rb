@@ -11,8 +11,13 @@ Capistrano::Configuration.instance(:must_exist).load do
     desc "Gets git diff"
     task :get_diff do
       begin
-        set :git_diff, Octokit.commits("#{fetch :repository}".scan(/:(.*)\.git/).last.first, "#{fetch :branch}").first.html_url
-        puts "Getting diff from #{fetch(:repository).scan(/:(.*)\.git/).last.first} on branch #{fetch :branch}"
+        repo_name = "#{fetch(:repository).scan(/:(.*)\.git/).last.first}"
+        tags = Octokit.tags("#{fetch :repository}".scan(/:(.*)\.git/).last.first)
+        if tags.count > 1
+          to = tags.last
+          from = tags[arr.count-2]
+          set :git_diff, "https://www.github.com/#{site}/compare/#{from.commit.sha}...#{to.commit.sha}"
+        end
       rescue
         git = Git.open(Dir.pwd.to_s)
         commits = Array.new
@@ -23,7 +28,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     
     desc "Sends git diff"
     task :send_diff do
-      body_message = fetch :git_diff
+      body_message = fetch(:git_diff, "No changes in #{fetch(:app_title, 'this project')}"
       mail = Mail.new do
         from    'capistrano@library.nyu.edu'
         body    body_message
