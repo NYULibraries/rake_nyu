@@ -12,11 +12,11 @@ Capistrano::Configuration.instance(:must_exist).load do
     task :get_diff do
       begin
         repo_name = "#{fetch(:repository).scan(/:(.*)\.git/).last.first}"
-        tags = Octokit.tags("#{fetch :repository}".scan(/:(.*)\.git/).last.first)
+        tags = Octokit.tags(repo_name)
         if tags.count > 1
           to = tags.last
           from = tags[arr.count-2]
-          set :git_diff, "https://www.github.com/#{site}/compare/#{from.commit.sha}...#{to.commit.sha}"
+          set :git_diff, "https://www.github.com/#{repo_name}/compare/#{from.commit.sha}...#{to.commit.sha}"
         end
       rescue
         git = Git.open(Dir.pwd.to_s)
