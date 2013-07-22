@@ -18,7 +18,7 @@ Capistrano::Configuration.instance(:must_exist).load do
         git_link = "https://www.github.com/#{repo_name}/compare/#{from.commit.sha}...#{to.commit.sha}"
         run "curl -i http://git.io -F \"url=#{git_link}\"" do |channel, stream, data|
           if data.include? "Location:"
-            data.scan(/Location:\s+(.*)/).last.first
+            return data.scan(/Location:\s+(.*)/).last.first
           end
         end
       end
