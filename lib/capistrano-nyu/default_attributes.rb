@@ -1,5 +1,3 @@
-# Including Capistrano Tagging recipes
-require 'capistrano/tagging'
 Capistrano::Configuration.instance(:must_exist).load do
   # SSH options
   set :ssh_options, {:forward_agent => true}
