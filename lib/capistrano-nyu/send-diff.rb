@@ -14,8 +14,8 @@ Capistrano::Configuration.instance(:must_exist).load do
         repo_name = "#{fetch(:repository).scan(/:(.*)\.git/).last.first}"
         tags = Octokit.tags(repo_name)
         if tags.count > 1
-          to = tags.last
-          from = tags[tags.count-2]
+          to = tags.first
+          from = tags[1]
           git_link = "https://www.github.com/#{repo_name}/compare/#{from.commit.sha}...#{to.commit.sha}"
           run "curl -i http://git.io -F \"url=#{git_link}\"" do |channel, stream, data|
             if data.include? "Location:"
