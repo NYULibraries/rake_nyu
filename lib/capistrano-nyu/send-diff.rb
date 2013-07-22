@@ -3,8 +3,8 @@ require 'octokit'
 require 'mail'
 
 Capistrano::Configuration.instance(:must_exist).load do
-  after   "deploy",               "send_diff:send"
-  before  "send_diff:send",       "send_diff:mail_setup"
+  after   "deploy",               "send_diff:send_diff"
+  before  "send_diff:send_diff",       "send_diff:mail_setup"
   before  "send_diff:mail_setup", "send_diff:get_diff"
   
   namespace :send_diff do
@@ -41,7 +41,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
     
     desc "Sends git diff"
-    task :send do
+    task :send_diff do
       body_message = fetch(:git_diff, "No changes in #{fetch(:app_title, 'this project')}")
       mail = Mail.new do
         from    'no-reply@library.nyu.edu'
