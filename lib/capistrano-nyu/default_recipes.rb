@@ -16,3 +16,5 @@ require_relative 'server/passenger'
 # The default attributes get set here. Apparently it makes more sense to set them at the end, as certain other recipes load up thes
 # attributes before a custom overrides.
 require_relative 'default_attributes'
+# Custom Capistrano tagging
+require_relative 'capistrano-tagging'

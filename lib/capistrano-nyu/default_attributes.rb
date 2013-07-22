@@ -1,15 +1,6 @@
 # Including Capistrano Tagging recipes
 require 'capistrano/tagging'
 Capistrano::Configuration.instance(:must_exist).load do
-  before 'tagging:deploy', 'tagging:checkout_branch'
-  namespace :tagging do
-    task :checkout_branch do
-      run_locally "git checkout -b #{revision}; true"
-      run_locally "git checkout #{revision}; true"
-      run_locally "git pull origin #{revision}; true"
-    end
-  end
-  
   # SSH options
   set :ssh_options, {:forward_agent => true}
   
