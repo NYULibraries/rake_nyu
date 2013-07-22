@@ -4,12 +4,9 @@ Capistrano::Configuration.instance(:must_exist).load do
   before 'tagging:deploy', 'tagging:checkout_branch'
   namespace :tagging do
     task :checkout_branch do
-      run "cd #{current_release} && git branch; true" do |channel, stream, data|
-        data.gsub!(/\**[^\S\n]+/, "")
-        if !data.split("\n").include? "#{revision}"
-          run_locally "git checkout -b #{revision}; true"
-        end
-      end
+      run_locally "git checkout -b #{revision}; true"
+      run_locally "git checkout #{revision}; true"
+      run_locally "git pull origin #{revision}; true"
     end
   end
   
