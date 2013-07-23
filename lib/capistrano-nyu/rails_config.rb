@@ -6,7 +6,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   # what's in the rails config environment
   before  "rails_config:set_servers",   "rails_config:set_variables"
   before  "rails_config:see",           "rails_config:set_servers"
-  on      :start,                       "rails_config:see"
+  after   :start,                       "rails_config:see"
   
   namespace :rails_config do
     desc "Set stage variables"
