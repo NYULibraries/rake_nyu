@@ -1,4 +1,10 @@
 Capistrano::Configuration.instance(:must_exist).load do
+  # Hack on Capistrano, Capistrnao requires :repository to be set, and thus is always set with garbage value.
+  # This makes it impossible to detect wether or not the user set it, so unsetting here solves that.
+  # Also, we re-set it here anyway, so it's safe thus far...
+  unset :repository
+  unset :application
+  
   # SSH options
   _cset :ssh_options, {:forward_agent => true}
   
