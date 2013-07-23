@@ -1,8 +1,5 @@
-require 'capistrano'
-
 Capistrano::Configuration.instance(:must_exist).load do
   namespace :deploy do
-      
     desc "Start the application"
     task :start do
       puma_ports.each do |port|

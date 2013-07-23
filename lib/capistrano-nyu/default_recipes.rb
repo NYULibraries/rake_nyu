@@ -5,8 +5,14 @@ require 'capistrano'
 require_relative 'assets'
 # This recipe clears the cache.
 require_relative 'cache'
+# Set up multistage.
+require_relative 'multistage'
 # The rails config recipe loads up all our application specific settings from a settings.yaml
 require_relative 'rails_config'
+# The bundler recipe sets up a bundler environment with ruby.
+require_relative 'bundler'
+# The new_relic recipe enables use of new_relic with rake_nyu.
+require_relative 'new_relic'
 # This recipe sends the git diff between two commits.
 require_relative 'send_diff'
 # The rvm recipe sets up an rvm environment with ruby.
