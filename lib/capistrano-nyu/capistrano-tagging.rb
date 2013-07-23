@@ -4,15 +4,8 @@ Capistrano::Configuration.instance(:must_exist).load do
   after  'deploy:restart', 'tagging:deploy'
   before 'deploy:cleanup', 'tagging:cleanup'
   before 'tagging:deploy', 'tagging:checkout_branch'
-  namespace :tagging do
-    
-  end
 
   namespace :tagging do
-    _cset(:tagging_format, ':rails_env_:release')
-    _cset(:tagging_remote, 'origin')
-    #_cset(:tagging_environments, %w(production))
-
     def fetch_or_send(method)
       fetch method, respond_to?(method) ? send(method) : nil
     end
