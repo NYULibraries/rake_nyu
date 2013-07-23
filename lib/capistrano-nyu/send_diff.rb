@@ -3,7 +3,7 @@ require 'octokit'
 require 'mail'
 
 Capistrano::Configuration.instance(:must_exist).load do
-  after   "deploy",               "send_diff:send_diff"
+  after   "deploy", "send_diff:send_diff"
   
   namespace :send_diff do
     def prev_release_tag
@@ -17,7 +17,6 @@ Capistrano::Configuration.instance(:must_exist).load do
       if tags.count > 1
         to = tags.first
         from = prev_release_tag.nil? ? tags[1] : (tags.keep_if{|tag| tag.name.eql?(prev_release_tag)}).first
-
         return git_io "https://www.github.com/#{repo_name}/compare/#{from.commit.sha}...#{to.commit.sha}"
       end
     end
@@ -34,7 +33,6 @@ Capistrano::Configuration.instance(:must_exist).load do
       git = Git.open(Dir.pwd.to_s)
       commits = Array.new
       git.log.each {|l| commits.push l.sha }
-      
       git.diff(commits.first(2).last, commits.first(2).first).to_s
     end
     
