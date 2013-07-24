@@ -20,9 +20,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", "~> 3.2.13"
   s.add_development_dependency "rspec", "~> 2.13.0"
   s.add_development_dependency "rspec", "~> 2.13.0"
-  s.add_development_dependency 'activerecord-jdbcsqlite3-adapter'
-  s.add_development_dependency 'activerecord-jdbc-adapter'
-  s.add_development_dependency 'activerecord-jdbcmysql-adapter'
+  s.add_development_dependency 'mysql2'
   
   s.add_dependency "cap_git_tools", "~> 0.9.1"
   s.add_dependency "git", "~> 1.2.5"
