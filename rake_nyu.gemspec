@@ -27,4 +27,5 @@ Gem::Specification.new do |s|
   s.add_dependency "rails_config", "~> 0.3.2"
   s.add_dependency "capistrano", "~> 2.15.5"
   s.add_dependency "rvm-capistrano", "~> 1.4.0"
+  s.add_dependency "newrelic_rpm", "~> 3.6.0"
 end
