@@ -26,7 +26,8 @@ Capistrano::Configuration.instance(:must_exist).load do
   _cset :app_dir, '/apps'
   
   # Git Tagging vars
-  _cset(:tagging_format, ':rails_env_:release')
+  _cset(:current_tag) {"#{fetch :stage}_#{fetch :current_release}"}
+  _cset(:previous_tag) {"#{fetch :stage}_#{fetch :previous_release}"}
   _cset(:tagging_remote, 'origin')
   #_cset(:tagging_environments, %w(production))
   
@@ -39,4 +40,5 @@ Capistrano::Configuration.instance(:must_exist).load do
   
   # Bundler vars
   _cset :bundle_without, [:development, :test]
+
 end
