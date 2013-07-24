@@ -1,14 +1,14 @@
 # Requiring Capistrano for recipes.
 require 'capistrano'
 
+# Set up multistage.
+require_relative 'multistage'
 # Overrideable defaults.
 require_relative 'default_attributes'
 # This loads a recipe for precompiling assets, this specific one only precompiles if there are any changes.
 require_relative 'assets'
 # This recipe clears the cache.
 require_relative 'cache'
-# Set up multistage.
-require_relative 'multistage'
 # The rails config recipe loads up all our application specific settings from a settings.yaml
 require_relative 'rails_config'
 # The bundler recipe sets up a bundler environment with ruby.
