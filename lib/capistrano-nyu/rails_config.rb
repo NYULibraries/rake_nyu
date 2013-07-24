@@ -1,6 +1,3 @@
-# Include New Relic recipes
-require 'new_relic/recipes'
-
 Capistrano::Configuration.instance(:must_exist).load do
   # Set the servers from rails config before we see
   # what's in the rails config environment
