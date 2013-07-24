@@ -6,16 +6,6 @@ Capistrano::Configuration.instance(:must_exist).load do
   before 'tagging:deploy', 'tagging:checkout_branch'
 
   namespace :tagging do
-    def fetch_or_send(method)
-      fetch method, respond_to?(method) ? send(method) : nil
-    end
-
-    def tag(options = {})
-      fetch(:tagging_format).gsub(/:([a-z_]+[^_:])/i) do |match|
-        method = $1.to_sym
-        options.fetch method, fetch_or_send(method)
-      end
-    end
 
     def remote
       fetch(:tagging_remote)
@@ -34,10 +24,10 @@ Capistrano::Configuration.instance(:must_exist).load do
       `git config --get user.email`.chomp
     end
 
-    def create_tag(name)
+    def create_tag
       if tagging_environment?
-        run_locally "git tag #{name} #{revision} -m \"Deployed by #{user_name} <#{user_email}>\""
-        run_locally "git push #{remote} refs/tags/#{name}:refs/tags/#{name}"
+        run_locally "git tag #{fetch :current_tag} #{revision} -m \"Deployed by #{user_name} <#{user_email}>\""
+        run_locally "git push #{remote} refs/tags/#{fetch :current_tag}:refs/tags/#{name}"
       else
         logger.info "ignored git tagging in #{rails_env} environment"
       end
@@ -62,7 +52,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     
     desc "Create release tag in local and origin repo"
     task :deploy do
-      create_tag tag(:release => release_name)
+      create_tag
     end
 
     desc "Remove release tag from local and origin repo"
