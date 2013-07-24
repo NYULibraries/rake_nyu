@@ -6,17 +6,13 @@ Capistrano::Configuration.instance(:must_exist).load do
   after   "deploy", "send_diff:send_diff"
   
   namespace :send_diff do
-    def prev_release_tag
-      @prev_release_tag ||= "#{fetch(:rails_env)}_#{fetch(:releases)[-2]}" unless !exists?(:tagging_format) || !fetch(:tagging_format).to_s.eql?(":rails_env_:release")
-    end
-    
     def public_repo
       repo_name = "#{fetch(:repository).scan(/:(.*)\.git/).last.first}"
       tags = Octokit.tags(repo_name)
 
       if tags.count > 1
         to = tags.first
-        from = prev_release_tag.nil? ? tags[1] : (tags.keep_if{|tag| tag.name.eql?(prev_release_tag)}).first
+        from = exists?(:previous_tag) ? (tags.keep_if{|tag| tag.name.eql?(fetch(:previous_tag))}).first : tags[1]
         return git_io "https://www.github.com/#{repo_name}/compare/#{from.commit.sha}...#{to.commit.sha}"
       end
     end
