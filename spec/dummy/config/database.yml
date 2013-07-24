@@ -7,6 +7,7 @@ development: &development
   encoding: utf8
   
 staging:
+  adapter: mysql2
   <<: *development
   
 test:
