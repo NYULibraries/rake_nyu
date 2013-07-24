@@ -19,7 +19,7 @@ require_relative 'rvm'
 require_relative 'new_relic'
 # The default server to use for this recipe is passenger.
 require_relative 'server/passenger'
+# Custom Capistrano tagging
+require_relative 'tagging'
 # This recipe sends the git diff between two commits.
 require_relative 'send_diff'
-# Custom Capistrano tagging
-require_relative 'capistrano-tagging'
