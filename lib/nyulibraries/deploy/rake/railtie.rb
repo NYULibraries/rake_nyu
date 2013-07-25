@@ -1,4 +1,4 @@
-module RakeNyu
+module NyuLibraries
   if defined?(::Rails) && ::Rails.version >= '3.1.0'
     class Railtie < Rails::Railtie
       rake_tasks do

@@ -1,4 +1,4 @@
-module RakeNyu
+module NyuLibraries
   class PumaConfig
     attr_reader :port
 
