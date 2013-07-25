@@ -2,7 +2,7 @@ module RakeNyu
   if defined?(::Rails) && ::Rails.version >= '3.1.0'
     class Railtie < Rails::Railtie
       rake_tasks do
-        load "tasks/rake_nyu.rake"
+        load "rake_nyu.rake"
       end
     end
   else
@@ -12,7 +12,7 @@ module RakeNyu
       class << self
         def install_tasks
           @rake_tasks ||= []
-          @rake_tasks << load("tasks/rake_nyu.rake")
+          @rake_tasks << load("rake_nyu.rake")
           @rake_tasks
         end
       end

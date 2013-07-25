@@ -1,6 +1,3 @@
-# Requiring Capistrano for recipes.
-require 'capistrano'
-
 # Set up multistage.
 require_relative 'multistage'
 # Overrideable defaults.

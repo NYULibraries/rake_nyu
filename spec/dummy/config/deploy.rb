@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), '../../../lib', 'capistrano-nyu')
+require File.join(File.dirname(__FILE__), '../../../lib/common-deploy/tasks', 'capistrano')
 
 set :app_title, "rake_nyu"
 set :branch, "devel"
