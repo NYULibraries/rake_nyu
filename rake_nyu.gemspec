@@ -1,12 +1,12 @@
 $:.push File.expand_path("../lib", __FILE__)
 
 # Maintain your gem's version:
-require "rake_nyu/version"
+require "common-deploy/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
   s.name        = "rake_nyu"
-  s.version     = RakeNyu::VERSION
+  s.version     = CommonDeploy::VERSION
   s.authors     = ["Scot Dalton"]
   s.email       = ["scot.dalton@nyu.edu"]
   s.homepage    = "https://github.com/NYULibraries/rake_nyu"
