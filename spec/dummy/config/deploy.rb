@@ -4,3 +4,9 @@ set :app_title, "rake_nyu"
 set :branch, "devel"
 set :scm, :git
 set :bundle_flags, "--quiet"
+
+namespace :deploy do
+  tak :migrate do
+    # Do NOTHING
+  end
+end
