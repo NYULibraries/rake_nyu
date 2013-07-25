@@ -2,7 +2,6 @@ require 'capistrano'
 
 Capistrano::Configuration.instance(:must_exist).load do
   after  'deploy:restart', 'tagging:deploy'
-  before 'deploy:cleanup', 'tagging:cleanup'
   before 'tagging:deploy', 'tagging:checkout_branch'
 
   namespace :tagging do
@@ -33,15 +32,6 @@ Capistrano::Configuration.instance(:must_exist).load do
       end
     end
 
-    def remove_tag(name)
-      if tagging_environment?
-        run_locally "git tag -d #{name}; true" 
-        run_locally "git push #{remote} :refs/tags/#{name}; true"
-      else
-        logger.info "ignored git tagging in #{rails_env} environment"
-      end
-    end
-
     desc "Make sure branch is checked out and up to date before tagging"
     task :checkout_branch do
       run_locally "git checkout -b #{revision}; true"
@@ -53,20 +43,6 @@ Capistrano::Configuration.instance(:must_exist).load do
     desc "Create release tag in local and origin repo"
     task :deploy do
       create_tag
-    end
-
-    desc "Remove release tag from local and origin repo"
-    task :cleanup do
-      count = fetch(:keep_releases, 5).to_i
-
-      if count >= releases.size
-        logger.important "no old release tags to clean up"
-      else
-        logger.info "keeping #{count} of #{releases.size} release tags"
-        releases.first(releases.size - count).map do |release|
-          remove_tag tag(:release => release)
-        end
-      end
     end
   end
 end
