@@ -16,7 +16,7 @@ Capistrano::Configuration.instance(:must_exist).load do
 
     desc "Reset the New Relic file"
     task :reset do
-      run_locally "bundle exec rake nyu:newrelic:reset RAILS_ENV=#{fetch(:rails_env, 'staging'} "
+      run_locally "bundle exec rake nyu:newrelic:reset RAILS_ENV=#{fetch(:rails_env, 'staging')} "
     end
   end
 end

@@ -28,7 +28,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   _cset(:current_tag) {"#{fetch :stage}_#{fetch(:releases).last}"}
   _cset(:previous_tag) {"#{fetch :stage}_#{fetch(:releases)[-2]}"}
   _cset(:tagging_remote, 'origin')
-  #_cset(:tagging_environments, %w(production))
+  _cset(:tagging_environments, %w(production))
   
   # RVM  vars
   _cset :rvm_ruby_string, "ruby-1.9.3-p448"
