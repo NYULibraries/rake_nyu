@@ -25,8 +25,8 @@ Capistrano::Configuration.instance(:must_exist).load do
   _cset(:repository) {"git@github.com:NYULibraries/#{fetch :app_title}.git"}
   
   # Git Tagging vars
-  _cset(:current_tag) {"#{fetch :stage}_#{fetch :current_release}"}
-  _cset(:previous_tag) {"#{fetch :stage}_#{fetch :previous_release}"}
+  _cset(:current_tag) {"#{fetch :stage}_#{fetch(:releases).last}"}
+  _cset(:previous_tag) {"#{fetch :stage}_#{fetch(:releases)[-2]}"}
   _cset(:tagging_remote, 'origin')
   #_cset(:tagging_environments, %w(production))
   
