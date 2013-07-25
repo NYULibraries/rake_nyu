@@ -19,3 +19,14 @@ namespace :deploy do
     end
   end
 end
+
+namespace :newrelic do
+  task :set do
+    # DO NOTHING!!!
+  end
+
+  desc "Reset the New Relic file"
+  task :reset do
+    # DO NOTHING!!!!!!
+  end
+end
