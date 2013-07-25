@@ -10,3 +10,12 @@ namespace :deploy do
     # Do NOTHING
   end
 end
+
+namespace :deploy do
+  namespace :assets do
+    desc "Precompiles if assets have been changed"
+    task :precompile, :roles => :web, :except => { :no_release => true } do
+      # DO NOTHING!!
+    end
+  end
+end
