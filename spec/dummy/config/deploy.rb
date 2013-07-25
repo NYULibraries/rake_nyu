@@ -30,3 +30,10 @@ namespace :newrelic do
     # DO NOTHING!!!!!!
   end
 end
+
+namespace :cache do
+  desc "Clear rails cache"
+  task :tmp_clear, :roles => :app do
+    # DO NOTHING!!!!!!!!!!!!
+  end
+end
