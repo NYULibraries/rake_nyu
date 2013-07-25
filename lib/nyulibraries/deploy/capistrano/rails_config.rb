@@ -13,7 +13,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     task :set_variables do
       # Configure app_settings from rails_config
       # Defer processing until we have rails environment
-      set(:app_settings)  { eval(run_locally("rails runner -e #{rails_env} 'p Settings.capistrano.to_hash'")) }
+      set(:app_settings)  { eval(run_locally("rails runner -e #{fetch(:rails_env, 'staging')} 'p Settings.capistrano.to_hash'")) }
       set(:scm_username)  { app_settings[:scm_username] }
       set(:app_path)      { app_settings[:path] }
       set(:user)          { app_settings[:user] }

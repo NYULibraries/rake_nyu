@@ -11,8 +11,8 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
 
     def tagging_environment?
-      return true if self[:tagging_environments].nil?
-      self[:tagging_environments].include?(self[:rails_env])
+      return true if fetch(:tagging_environments).nil?
+      fetch(:tagging_environments).include?(fetch(:stage, fetch(:rails_env, "staging")))
     end
 
     def user_name
@@ -26,9 +26,9 @@ Capistrano::Configuration.instance(:must_exist).load do
     def create_tag
       if tagging_environment?
         run_locally "git tag #{fetch :current_tag} #{revision} -m \"Deployed by #{user_name} <#{user_email}>\""
-        run_locally "git push #{remote} refs/tags/#{fetch :current_tag}:refs/tags/#{name}"
+        run_locally "git push #{remote} refs/tags/#{fetch :current_tag}:refs/tags/#{fetch :current_tag}"
       else
-        logger.info "ignored git tagging in #{rails_env} environment"
+        logger.info "ignored git tagging in #{fetch(:rails_env, fetch(:stage, 'staging'))} environment"
       end
     end
 
