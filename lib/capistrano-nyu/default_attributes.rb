@@ -23,7 +23,6 @@ Capistrano::Configuration.instance(:must_exist).load do
   # Application specs
   _cset(:application) {"#{fetch :app_title}_repos"}
   _cset(:repository) {"git@github.com:NYULibraries/#{fetch :app_title}.git"}
-  _cset :app_dir, '/apps'
   
   # Git Tagging vars
   _cset(:current_tag) {"#{fetch :stage}_#{fetch :current_release}"}
