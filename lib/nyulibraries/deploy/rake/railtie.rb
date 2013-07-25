@@ -2,7 +2,8 @@ module NyuLibraries
   if defined?(::Rails) && ::Rails.version >= '3.1.0'
     class Railtie < Rails::Railtie
       rake_tasks do
-        load "rake_nyu.rake"
+        load "puma.rake"
+        load "new_relic.rake"
       end
     end
   else
@@ -12,7 +13,8 @@ module NyuLibraries
       class << self
         def install_tasks
           @rake_tasks ||= []
-          @rake_tasks << load("rake_nyu.rake")
+          @rake_tasks << load("puma.rake")
+          @rake_tasks << load("new_relic.rake")
           @rake_tasks
         end
       end

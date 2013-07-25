@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), '../../../lib/nyulibraries/deploy/', 'capistrano')
 
-set :app_title, "rake_nyu"
+set :app_title, "nyulibraries_deploy"
 set :branch, "devel"
 set :scm, :git
 set :bundle_flags, "--quiet"
@@ -35,5 +35,16 @@ namespace :cache do
   desc "Clear rails cache"
   task :tmp_clear, :roles => :app do
     # DO NOTHING!!!!!!!!!!!!
+  end
+end
+
+namespace :tagging do
+  task :deploy do
+    if tagging_environment?
+      run_locally "git tag #{NyuLibraries::VERSION} #{revision} -m \"Deployed by #{user_name} <#{user_email}>\""
+      run_locally "git push #{remote} refs/tags/#{NyuLibraries::VERSION}:refs/tags/#{NyuLibraries::VERSION}"
+    else
+      logger.info "ignored git tagging in #{fetch(:rails_env, fetch(:stage, 'staging'))} environment"
+    end
   end
 end
