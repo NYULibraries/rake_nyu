@@ -5,7 +5,8 @@ Capistrano::Configuration.instance(:must_exist).load do
   before  "rails_config:see",           "rails_config:set_servers"
   before  "deploy",                     "rails_config:see"
   before  "deploy:cold",                "rails_config:see"
-  before  "deploy:setup",                "rails_config:see"
+  before  "deploy:setup",               "rails_config:see"
+  before  "deploy:check",               "rails_config:see"
   
   namespace :rails_config do
     desc "Set stage variables"
