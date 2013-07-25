@@ -6,7 +6,7 @@ set :scm, :git
 set :bundle_flags, "--quiet"
 
 namespace :deploy do
-  tak :migrate do
+  task :migrate do
     # Do NOTHING
   end
 end
