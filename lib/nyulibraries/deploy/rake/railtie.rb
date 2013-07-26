@@ -13,8 +13,8 @@ module NyuLibraries
       class << self
         def install_tasks
           @rake_tasks ||= []
-          @rake_tasks << load("puma.rake")
-          @rake_tasks << load("new_relic.rake")
+          @rake_tasks << load("nyulibraries/deploy/rake/puma.rake")
+          @rake_tasks << load("nyulibraries/deploy/rake/new_relic.rake")
           @rake_tasks
         end
       end
