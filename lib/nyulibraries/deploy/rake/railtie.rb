@@ -2,8 +2,8 @@ module NyuLibraries
   if defined?(::Rails) && ::Rails.version >= '3.1.0'
     class Railtie < Rails::Railtie
       rake_tasks do
-        load "puma.rake"
-        load "new_relic.rake"
+        load "nyulibraries/deploy/rake/puma.rake"
+        load "nyulibraries/deploy/rake/new_relic.rake"
       end
     end
   else
