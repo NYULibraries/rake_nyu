@@ -20,6 +20,6 @@ module NyuLibraries
       end
     end
     # Install tasks
-    RakeNyu::TaskInstaller.install_tasks
+    NyuLibraries::TaskInstaller.install_tasks
   end
 end
