@@ -5,7 +5,7 @@ require "nyulibraries/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "rake_nyu"
+  s.name        = "nyulibraries_deploy"
   s.version     = NyuLibraries::VERSION
   s.authors     = ["Scot Dalton"]
   s.email       = ["scot.dalton@nyu.edu"]
