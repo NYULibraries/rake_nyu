@@ -10,8 +10,8 @@ Capistrano::Configuration.instance(:must_exist).load do
         if from.nil? || capture("cd #{fetch :current_release} && #{source.local.log(from)} vendor/assets/ lib/assets app/assets/ | wc -l").to_i > 0
           run_locally("rake assets:clean && rake assets:precompile")
           run_locally "cd public && tar -jcf assets.tar.bz2 assets"
-          top.upload "public/assets.tar.bz2", "#{fetch shared_path}", :via => :scp
-          run "cd #{fetch shared_path} && tar -jxf assets.tar.bz2 && rm assets.tar.bz2"
+          top.upload "public/assets.tar.bz2", "#{fetch :shared_path}", :via => :scp
+          run "cd #{fetch :shared_path} && tar -jxf assets.tar.bz2 && rm assets.tar.bz2"
           run_locally "rm public/assets.tar.bz2"
           run_locally("rake assets:clean")
         else
