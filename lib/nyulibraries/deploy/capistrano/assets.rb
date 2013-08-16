@@ -7,7 +7,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       desc "Precompiles if assets have been changed"
       task :precompile, :roles => :web, :except => { :no_release => true } do
         from = source.next_revision(current_revision) rescue nil
-        if from.nil? || capture("cd #{fetch :current_release} && #{source.local.log(from)} vendor/assets/ lib/assets app/assets/ | wc -l").to_i > 0
+        if from.nil? || capture("cd #{fetch :current_release} && #{source.local.log(from)[0..-3]} vendor/assets/ lib/assets app/assets/ | wc -l").to_i > 0
           run_locally("rake assets:clean && rake assets:precompile")
           run_locally "cd public && tar -jcf assets.tar.bz2 assets"
           top.upload "public/assets.tar.bz2", "#{fetch shared_path}", :via => :scp
