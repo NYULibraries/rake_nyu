@@ -1,4 +1,4 @@
-module RakeNyu
+module NyuLibraries
   require 'yaml'
   require 'erb'
   require 'rails'

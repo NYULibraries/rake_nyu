@@ -1,4 +1,4 @@
-module RakeNyu
+module NyuLibraries
   require 'spec_helper'
   describe NewRelicManager do
     before(:each) do
