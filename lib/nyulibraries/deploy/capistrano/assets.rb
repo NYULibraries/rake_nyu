@@ -1,6 +1,5 @@
 Capistrano::Configuration.instance(:must_exist).load do
   before 'deploy:finalize_update', 'deploy:assets:symlink'
-  after  'deploy:update_code',     'deploy:assets:precompile'
   
   namespace :deploy do
     namespace :assets do
