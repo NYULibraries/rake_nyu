@@ -63,7 +63,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       mail[:to]       = fetch(:recipient, "")
 
       mail.deliver! unless mail[:to].to_s.empty?
-      logger.info mail[:to].to_s.empty? ? "Diff not sent, recipient not found. Be sure to `set :recipient, 'you@host.tld'`" : "Sent to #{mail[:to]}"
+      logger.info mail[:to].to_s.empty? ? "Diff not sent, recipient not found. Be sure to `set :recipient, 'you@host.tld'`" : "Diff sent to #{mail[:to]}"
     end
   end
 end
