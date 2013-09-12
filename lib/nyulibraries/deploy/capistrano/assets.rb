@@ -5,20 +5,24 @@ Capistrano::Configuration.instance(:must_exist).load do
     namespace :assets do
       desc "Precompiles if assets have been changed"
       task :precompile, :roles => :web, :except => { :no_release => true } do
-        from = source.next_revision(current_revision) rescue nil
-        if from.nil? || capture("cd #{fetch :current_release} && #{source.local.log(from)[0..-3]} vendor/assets/ lib/assets app/assets/ | wc -l").to_i > 0
-          rails_env = "RAILS_ENV=#{fetch(:rails_env, fetch(:stage, fetch(:default_stage, 'staging')))}"
-          rails_group = "RAILS_GROUP=assets"
-          bundler = (Gem::Specification.find_by_name("bundler").activated?) ? "bundle exec" : ""
+        force_compile = false
+        changed_asset_count = 0
+        rails_env = "RAILS_ENV=#{fetch(:rails_env, fetch(:stage, fetch(:default_stage, 'staging')))}"
+        rails_group = "RAILS_GROUP=assets"
+        begin
+          from = source.next_revision(current_revision)
+          asset_locations = 'app/assets/ lib/assets vendor/assets'
+          changed_asset_count = capture("cd #{fetch :latest_release} && #{source.local.log(from)} #{asset_locations} | wc -l").to_i
+        rescue Exception => e
+          logger.info "Error: #{e}, forcing precompile"
+          force_compile = false
+        end
+        if changed_asset_count > 0 || force_compile
+          logger.info "#{changed_asset_count} assets have changed. Pre-compiling"
           run_locally("#{rails_env} #{rails_group} #{bundler} rake assets:clean")
           run_locally("#{rails_env} #{rails_group} #{bundler} rake assets:precompile")
-          run_locally "cd public && tar -jcf assets.tar.bz2 assets"
-          top.upload "public/assets.tar.bz2", "#{fetch :shared_path}", :via => :scp
-          run "cd #{fetch :shared_path} && tar -jxf assets.tar.bz2 && rm assets.tar.bz2"
-          run_locally "rm public/assets.tar.bz2"
-          run_locally("#{rails_env} #{rails_group} #{bundler} rake assets:clean")
         else
-          logger.info "Skipping asset precompilation because there were no asset changes"
+          logger.info "#{changed_asset_count} assets have changed. Skipping asset pre-compilation"
         end
       end
 
