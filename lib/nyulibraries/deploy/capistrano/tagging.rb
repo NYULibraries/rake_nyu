@@ -12,7 +12,7 @@ Capistrano::Configuration.instance(:must_exist).load do
 
     def tagging_environment?
       return true if fetch(:tagging_environments).nil?
-      fetch(:tagging_environments).include?(fetch(:stage, fetch(:rails_env, "staging")))
+      fetch(:tagging_environments).collect {|environment| environment.to_sym}.include?(fetch(:stage, fetch(:rails_env, :staging)).to_sym)
     end
 
     def user_name
