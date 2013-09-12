@@ -19,8 +19,8 @@ Capistrano::Configuration.instance(:must_exist).load do
         end
         if changed_asset_count > 0 || force_compile
           logger.info "#{changed_asset_count} assets have changed. Pre-compiling"
-          run "cd #{fetch :latest_release} && #{rails_env} #{rails_group} #{bundler} rake assets:clean")
-          run "cd #{fetch :latest_release} && #{rails_env} #{rails_group} #{bundler} rake assets:precompile")
+          run_locally("#{rails_env} #{rails_group} #{bundler} rake assets:clean")
+          run_locally("#{rails_env} #{rails_group} #{bundler} rake assets:precompile")
         else
           logger.info "#{changed_asset_count} assets have changed. Skipping asset pre-compilation"
         end
