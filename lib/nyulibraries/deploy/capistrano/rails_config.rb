@@ -1,12 +1,13 @@
 Capistrano::Configuration.instance(:must_exist).load do
   # Set the servers from rails config before we see
   # what's in the rails config environment
-  before  "rails_config:set_servers",   "rails_config:set_variables"
-  before  "rails_config:see",           "rails_config:set_servers"
-  before  "deploy",                     "rails_config:see"
-  before  "deploy:cold",                "rails_config:see"
-  before  "deploy:setup",               "rails_config:see"
-  before  "deploy:check",               "rails_config:see"
+  before  "rails_config:set_servers",           "rails_config:set_variables"
+  before  "rails_config:see",                   "rails_config:set_servers"
+  before  "deploy",                             "rails_config:see"
+  before  "deploy:cold",                        "rails_config:see"
+  before  "deploy:setup",                       "rails_config:see"
+  before  "deploy:check",                       "rails_config:see"
+  before  "deploy:assets:update_asset_mtimes",  "rails_config:see"
   
   namespace :rails_config do
     desc "Set stage variables"
