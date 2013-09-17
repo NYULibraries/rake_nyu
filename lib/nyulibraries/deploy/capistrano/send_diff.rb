@@ -35,9 +35,9 @@ Capistrano::Configuration.instance(:must_exist).load do
     def git_compare
       if tags_exist?
         short_link = git_io "https://www.github.com/#{repo_name}/compare/#{fetch :previous_tag}...#{fetch :current_tag}"
-        return "Something has changed in fetch(:app_title, 'this project')!\n Check out this sick compare: #{short_link}"
+        return "Something has changed in #{fetch(:app_title, 'this project')}!\n Check out this sick compare: #{short_link}"
       end
-      return "There was a redeployment in fetch(:app_title), but no release tags to compare!\n Current relase: #{fetch :current_tag,'uknown'}"
+      return "There was a redeployment in #{fetch(:app_title)}, but no release tags to compare!\n Current relase: #{fetch :current_tag,'uknown'}"
     end
     
     def git_io link
