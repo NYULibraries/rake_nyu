@@ -9,7 +9,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   
   namespace :rails_config do
     # desc "Set stage variables"
-    def set_variables
+    task :set_variables do
       # Configure app_settings from rails_config
       # Defer processing until we have rails environment
       set(:app_settings)  { eval(run_locally("rails runner -e #{fetch(:rails_env, 'staging')} 'p Settings.capistrano.to_hash'")) }
@@ -21,7 +21,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
 
     # desc "Set RailsConfig servers"
-    def set_servers
+    task :set_servers do
       server "#{app_settings[:servers].first}", :app, :web, :db, :primary => true
       app_settings[:servers].slice(1, app_settings[:servers].length-1).each do |host|
         server "#{host}", :app, :web
