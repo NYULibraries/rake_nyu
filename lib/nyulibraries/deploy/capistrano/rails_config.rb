@@ -1,8 +1,6 @@
 Capistrano::Configuration.instance(:must_exist).load do
   # Set the servers from rails config before we see
   # what's in the rails config environment
-  before  "rails_config:set_servers",           "rails_config:set_variables"
-  before  "rails_config:see",                   "rails_config:set_servers"
   before  "deploy",                             "rails_config:see"
   before  "deploy:cold",                        "rails_config:see"
   before  "deploy:setup",                       "rails_config:see"
@@ -10,8 +8,8 @@ Capistrano::Configuration.instance(:must_exist).load do
   before  "deploy:assets:update_asset_mtimes",  "rails_config:see"
   
   namespace :rails_config do
-    desc "Set stage variables"
-    task :set_variables do
+    # desc "Set stage variables"
+    def set_variables
       # Configure app_settings from rails_config
       # Defer processing until we have rails environment
       set(:app_settings)  { eval(run_locally("rails runner -e #{fetch(:rails_env, 'staging')} 'p Settings.capistrano.to_hash'")) }
@@ -22,8 +20,8 @@ Capistrano::Configuration.instance(:must_exist).load do
       set(:deploy_to)     {"#{fetch :app_path}#{fetch :application}"}
     end
 
-    desc "Set RailsConfig servers"
-    task :set_servers do
+    # desc "Set RailsConfig servers"
+    def set_servers
       server "#{app_settings[:servers].first}", :app, :web, :db, :primary => true
       app_settings[:servers].slice(1, app_settings[:servers].length-1).each do |host|
         server "#{host}", :app, :web
@@ -32,6 +30,13 @@ Capistrano::Configuration.instance(:must_exist).load do
 
     desc "See RailsConfig settings"
     task :see do
+      if !exists?(:app_settings)
+        set_variables
+        set_servers
+        p "Variables now set."
+      else
+        p "Variables already set."
+      end
       p "Settings: #{fetch :app_settings}"
       p "Servers: #{find_servers}"
       p "SCM Username: #{fetch :scm_username}"
