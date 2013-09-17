@@ -1,5 +1,5 @@
 require 'spec_helper'
-module RakeNyu
+module NyuLibraries
   describe PumaConfig, "#initialize" do
     def dummy_path
       @dummy_path ||= File.expand_path("../../dummy", __FILE__)

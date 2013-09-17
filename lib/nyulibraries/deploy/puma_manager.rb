@@ -1,4 +1,4 @@
-module RakeNyu
+module NyuLibraries
   module PumaManager
 
     def self.puma_config(*args)
