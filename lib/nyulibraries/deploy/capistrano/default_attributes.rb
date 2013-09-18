@@ -27,8 +27,8 @@ Capistrano::Configuration.instance(:must_exist).load do
   # Git Tagging vars
   _cset(:current_tag) {"#{fetch :stage}_#{fetch(:releases).last}"}
   _cset(:previous_tag) {"#{fetch :stage}_#{fetch(:releases)[-2]}"}
-  _cset(:tagging_remote, 'origin')
-  _cset(:tagging_environments, %w(production))
+  _cset :tagging_remote, 'origin'
+  _cset :tagging_environments, ["production"]
   
   # RVM  vars
   _cset :rvm_ruby_string, "ruby-1.9.3-p448"
@@ -36,6 +36,9 @@ Capistrano::Configuration.instance(:must_exist).load do
   
   # Rails specific vars
   _cset :normalize_asset_timestamps, false
+  
+  # New Relic vars
+  _cset :new_relic_environments, ["production"]
   
   # Bundler vars
   _cset :bundle_without, [:development, :test]
