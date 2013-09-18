@@ -36,7 +36,7 @@ Capistrano::Configuration.instance(:must_exist).load do
         short_link = git_io "https://www.github.com/#{repo_name}/compare/#{fetch :previous_tag}...#{fetch :current_tag}"
         return "Something has changed in #{fetch(:app_title, 'this project')}!\n Check out this sick compare: #{short_link}"
       end
-      return "There was a redeployment in #{fetch(:app_title)}, but no release tags to compare!\n Current relase: #{fetch :current_tag,'uknown'}"
+      return "There was a redeployment in #{fetch(:app_title)}, nothing has changed."
     end
     
     def git_io link
@@ -69,12 +69,17 @@ Capistrano::Configuration.instance(:must_exist).load do
       
       mail = Mail.new
       mail[:from]     = 'no-reply@library.nyu.edu'
-      mail[:body]     = fetch(:git_diff)
+      mail[:body]     = fetch(:git_diff, "")
       mail[:subject]  = "Recent changes for #{fetch(:app_title, 'this project')}"
       mail[:to]       = fetch(:recipient, "")
 
-      mail.deliver! unless mail[:to].to_s.empty?
-      logger.info mail[:to].to_s.empty? ? "Diff not sent, recipient not found. Be sure to `set :recipient, 'you@host.tld'`" : "Diff sent to #{mail[:to]}"
+      begin
+        mail.deliver! unless mail[:to].to_s.empty?
+        logger.info mail[:to].to_s.empty? ? "Diff not sent, recipient not found. Be sure to `set :recipient, 'you@host.tld'`" : "Diff sent to #{mail[:to]}"
+      rescue
+        logger.info "Could not send mail."
+        logger.info "#{mail}"
+      end
     end
   end
 end
