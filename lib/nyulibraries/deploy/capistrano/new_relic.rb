@@ -9,14 +9,23 @@ Capistrano::Configuration.instance(:must_exist).load do
   
 
   namespace :newrelic do
+    def new_relic_environment?
+      return true if fetch(:new_relic_environments).nil?
+      fetch(:new_relic_environments).collect {|environment| environment.to_sym}.include?(fetch(:stage, fetch(:rails_env, :staging)).to_sym)
+    end
+    
     desc "Write New Relic file without ERB for processing by New Relic rpm recipe"
     task :set do
-      run_locally "bundle exec rake nyu:newrelic:set RAILS_ENV=#{fetch(:rails_env, 'staging')}"
+      if new_relic_environment?
+        run_locally "bundle exec rake nyu:newrelic:set RAILS_ENV=#{fetch(:rails_env, 'staging')}"
+      end
     end
 
     desc "Reset the New Relic file"
     task :reset do
-      run_locally "bundle exec rake nyu:newrelic:reset RAILS_ENV=#{fetch(:rails_env, 'staging')} "
+      if new_relic_environment?
+        run_locally "bundle exec rake nyu:newrelic:reset RAILS_ENV=#{fetch(:rails_env, 'staging')} "
+      end
     end
   end
 end
