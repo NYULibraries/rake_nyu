@@ -4,17 +4,39 @@ require 'mail'
 
 Capistrano::Configuration.instance(:must_exist).load do
   after   "deploy", "send_diff:send_diff"
-  
   namespace :send_diff do
-    def public_repo
-      repo_name = "#{fetch(:repository).scan(/:(.*)\.git/).last.first}"
-      tags = Octokit.tags(repo_name)
-
-      if tags.count > 1
-        to = tags.first
-        from = exists?(:previous_tag) ? (tags.keep_if{|tag| tag.name.eql?(fetch(:previous_tag))}).first : tags[1]
-        return git_io "https://www.github.com/#{repo_name}/compare/#{from.commit.sha}...#{to.commit.sha}"
+    
+    def repo_name
+      @repo_name ||= "#{fetch(:repository).scan(/:(.*)\.git/).last.first}"
+    end
+    
+    def git_tags
+      git = Git.open(Dir.pwd.to_s)
+      git.fetch
+      tags = Array.new
+      git.tags.each {|tag| tags.push tag}
+      tags
+    end
+    
+    def tags_exist?
+      current_tag = fetch(:current_tag,"")
+      previous_tag = fetch(:previous_tag,"")
+      if previous_tag.empty? || current_tag.empty?
+        return false
       end
+      tags = git_tags
+      tags.keep_if do |tag|
+        tag.name.eql?(current_tag) || tag.name.eql?(previous_tag)
+      end
+      return tags.count > 1
+    end
+    
+    def git_compare
+      if tags_exist?
+        short_link = git_io "https://www.github.com/#{repo_name}/compare/#{fetch :previous_tag}...#{fetch :current_tag}"
+        return "Something has changed in #{fetch(:app_title, 'this project')}!\n Check out this sick compare: #{short_link}"
+      end
+      return "There was a redeployment in #{fetch(:app_title)}, nothing has changed."
     end
     
     def git_io link
@@ -25,19 +47,8 @@ Capistrano::Configuration.instance(:must_exist).load do
       end 
     end
     
-    def private_repo
-      git = Git.open(Dir.pwd.to_s)
-      commits = Array.new
-      git.log.each {|l| commits.push l.sha }
-      git.diff(commits.first(2).last, commits.first(2).first).to_s
-    end
-    
     def set_diff
-      begin
-        set :git_diff, public_repo
-      rescue
-        set :git_diff, private_repo
-      end
+      set :git_diff, git_compare
     end
     
     def mail_setup
@@ -58,12 +69,17 @@ Capistrano::Configuration.instance(:must_exist).load do
       
       mail = Mail.new
       mail[:from]     = 'no-reply@library.nyu.edu'
-      mail[:body]     = fetch(:git_diff, "No changes in #{fetch(:app_title, 'this project')}")
+      mail[:body]     = fetch(:git_diff, "")
       mail[:subject]  = "Recent changes for #{fetch(:app_title, 'this project')}"
       mail[:to]       = fetch(:recipient, "")
 
-      mail.deliver! unless mail[:to].to_s.empty?
-      logger.info mail[:to].to_s.empty? ? "Diff not sent, recipient not found. Be sure to `set :recipient, 'you@host.tld'`" : "Diff sent to #{mail[:to]}"
+      begin
+        mail.deliver! unless mail[:to].to_s.empty?
+        logger.info mail[:to].to_s.empty? ? "Diff not sent, recipient not found. Be sure to `set :recipient, 'you@host.tld'`" : "Diff sent to #{mail[:to]}"
+      rescue
+        logger.info "Could not send mail."
+        logger.info "#{mail}"
+      end
     end
   end
 end
