@@ -13,7 +13,6 @@ Capistrano::Configuration.instance(:must_exist).load do
     def git_tags
       git = Git.open(Dir.pwd.to_s)
       git.fetch
-      git.pull
       tags = Array.new
       git.tags.each {|tag| tags.push tag}
       tags
