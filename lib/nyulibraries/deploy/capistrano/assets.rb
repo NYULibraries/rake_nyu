@@ -1,3 +1,5 @@
+require 'bundler'
+
 Capistrano::Configuration.instance(:must_exist).load do
   before 'deploy:finalize_update', 'deploy:assets:symlink'
   
@@ -19,8 +21,8 @@ Capistrano::Configuration.instance(:must_exist).load do
         end
         if changed_asset_count > 0 || force_compile
           logger.info "#{changed_asset_count} assets have changed. Pre-compiling"
-          run_locally("#{rails_env} #{rails_group} #{bundler} rake assets:clean")
-          run_locally("#{rails_env} #{rails_group} #{bundler} rake assets:precompile")
+          run ("cd #{latest_release} && #{rails_env} #{rails_group} bundle exec rake assets:clean")
+          run ("cd #{latest_release} && #{rails_env} #{rails_group} bundle exec rake assets:precompile")
         else
           logger.info "#{changed_asset_count} assets have changed. Skipping asset pre-compilation"
         end
