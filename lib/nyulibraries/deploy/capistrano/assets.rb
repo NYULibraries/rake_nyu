@@ -17,7 +17,7 @@ Capistrano::Configuration.instance(:must_exist).load do
           changed_asset_count = capture("cd #{fetch :latest_release} && #{source.local.log(from)} #{asset_locations} | wc -l").to_i
         rescue Exception => e
           logger.info "Error: #{e}, forcing precompile"
-          force_compile = false
+          force_compile = true
         end
         if changed_asset_count > 0 || force_compile
           logger.info "#{changed_asset_count} assets have changed. Pre-compiling"
