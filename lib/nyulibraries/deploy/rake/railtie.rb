@@ -21,7 +21,7 @@ module NyuLibraries
         end
       end
       # Install tasks
-      NyuLibraries::TaskInstaller.install_tasks
+      NyuLibraries::Deploy::TaskInstaller.install_tasks
     end
   end
 end
