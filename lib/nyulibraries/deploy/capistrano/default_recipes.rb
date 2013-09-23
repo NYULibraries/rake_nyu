@@ -18,5 +18,3 @@ require_relative 'server/passenger'
 require_relative 'tagging'
 # This recipe clears the cache.
 require_relative 'cache'
-# This recipe sends the git diff between two commits.
-require_relative 'send_diff'
