@@ -3,7 +3,7 @@ require 'git'
 require 'mail'
 
 Capistrano::Configuration.instance(:must_exist).load do
-  after  'deploy:restart',  'tagging:deploy'
+  before 'deploy:cleanup',  'tagging:deploy'
   before 'tagging:deploy',  'tagging:checkout_branch'
   after  'tagging:deploy',  'tagging:send_diff'
 
@@ -85,8 +85,8 @@ Capistrano::Configuration.instance(:must_exist).load do
 
     def create_tag
       if tagging_environment?
-        run_locally "git tag #{current_tag} #{revision} -m \"Deployed by #{user_name} <#{user_email}>\""
-        run_locally "git push #{remote} refs/tags/#{current_tag}:refs/tags/#{current_tag}"
+        run_locally "git tag #{current_tag} #{revision} -m \"Deployed by #{user_name} <#{user_email}>\"; true"
+        run_locally "git push #{remote} refs/tags/#{current_tag}:refs/tags/#{current_tag}; true"
       else
         logger.info "ignored git tagging in #{fetch(:rails_env, fetch(:stage, 'staging'))} environment"
       end
