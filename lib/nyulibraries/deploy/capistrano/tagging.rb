@@ -82,15 +82,6 @@ Capistrano::Configuration.instance(:must_exist).load do
         }
       end
     end
-    
-    def construct_mail
-      mail = Mail.new
-      mail[:from]     = 'no-reply@library.nyu.edu'
-      mail[:body]     = git_compare
-      mail[:subject]  = "Recent changes for #{fetch(:app_title, 'this project')}"
-      mail[:to]       = fetch(:recipient, "")
-      mail
-    end
 
     def create_tag
       if tagging_environment?
@@ -120,7 +111,11 @@ Capistrano::Configuration.instance(:must_exist).load do
     task :send_diff do
       if tagging_environment?
         mail_setup
-        mail = construct_mail
+        mail = Mail.new
+        mail[:from]     = 'no-reply@library.nyu.edu'
+        mail[:body]     = git_compare
+        mail[:subject]  = "Recent changes for #{fetch(:app_title, 'this project')}"
+        mail[:to]       = fetch(:recipient, "")
         begin
           mail.deliver! unless mail[:to].to_s.empty?
           logger.info mail[:to].to_s.empty? ? "Diff not sent, recipient not found. Be sure to `set :recipient, 'you@host.tld'`" : "Diff sent to #{mail[:to]}"
