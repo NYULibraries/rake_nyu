@@ -66,7 +66,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     
     def git_compare
       if current_tag?
-        git_link = "https://www.github.com/#{repo_name}/compare/" +(previous_tag? ? "#{previous_tag}" : "#{git.log.collect.first(2).last.sha}") + "...#{current_tag}"
+        git_link = "https://www.github.com/#{repo_name}/compare/" +(previous_tag? ? "#{previous_tag}" : "#{fetch(:previous_revision, git.log.collect.first(2).last.sha)}") + "...#{current_tag}"
         return "Something has changed in #{fetch(:app_title, 'this project')}!\n Check out this sick compare: #{git_io git_link}"
       end
       return "There was a redeployment in #{fetch(:app_title, 'this project')}, however there is nothing to compare."
