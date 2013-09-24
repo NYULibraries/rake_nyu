@@ -3,7 +3,7 @@ require 'git'
 require 'mail'
 
 Capistrano::Configuration.instance(:must_exist).load do
-  after  'deploy:restart',  'tagging:deploy'
+  before 'deploy:cleanup',  'tagging:deploy'
   before 'tagging:deploy',  'tagging:checkout_branch'
   after  'tagging:deploy',  'tagging:send_diff'
 
@@ -66,7 +66,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     
     def git_compare
       if current_tag?
-        git_link = "https://www.github.com/#{repo_name}/compare/" +(previous_tag? ? "#{previous_tag}" : "#{git.log.collect.first(2).last.sha}") + "...#{current_tag}"
+        git_link = "https://www.github.com/#{repo_name}/compare/" +(previous_tag? ? "#{previous_tag}" : "#{fetch(:previous_revision, git.log.collect.first(2).last.sha)}") + "...#{current_tag}"
         return "Something has changed in #{fetch(:app_title, 'this project')}!\n Check out this sick compare: #{git_io git_link}"
       end
       return "There was a redeployment in #{fetch(:app_title, 'this project')}, however there is nothing to compare."
@@ -82,20 +82,11 @@ Capistrano::Configuration.instance(:must_exist).load do
         }
       end
     end
-    
-    def construct_mail
-      mail = Mail.new
-      mail[:from]     = 'no-reply@library.nyu.edu'
-      mail[:body]     = git_compare
-      mail[:subject]  = "Recent changes for #{fetch(:app_title, 'this project')}"
-      mail[:to]       = fetch(:recipient, "")
-      mail
-    end
 
     def create_tag
       if tagging_environment?
-        run_locally "git tag #{current_tag} #{revision} -m \"Deployed by #{user_name} <#{user_email}>\""
-        run_locally "git push #{remote} refs/tags/#{current_tag}:refs/tags/#{current_tag}"
+        run_locally "git tag #{current_tag} #{revision} -m \"Deployed by #{user_name} <#{user_email}>\"; true"
+        run_locally "git push #{remote} refs/tags/#{current_tag}:refs/tags/#{current_tag}; true"
       else
         logger.info "ignored git tagging in #{fetch(:rails_env, fetch(:stage, 'staging'))} environment"
       end
@@ -120,7 +111,11 @@ Capistrano::Configuration.instance(:must_exist).load do
     task :send_diff do
       if tagging_environment?
         mail_setup
-        mail = construct_mail
+        mail = Mail.new
+        mail[:from]     = 'no-reply@library.nyu.edu'
+        mail[:body]     = git_compare
+        mail[:subject]  = "Recent changes for #{fetch(:app_title, 'this project')}"
+        mail[:to]       = fetch(:recipient, "")
         begin
           mail.deliver! unless mail[:to].to_s.empty?
           logger.info mail[:to].to_s.empty? ? "Diff not sent, recipient not found. Be sure to `set :recipient, 'you@host.tld'`" : "Diff sent to #{mail[:to]}"
