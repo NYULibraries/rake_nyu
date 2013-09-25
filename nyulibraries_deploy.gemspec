@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
   s.homepage    = "https://github.com/NYULibraries/nyulibraries_deploy"
   s.summary     = "Common deploy tasks for the NYU Libraries."
   s.description = "Common deploy tasks for the NYU Libraries."
+  s.license     = 'MIT'
 
   s.files = Dir["lib/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
 
