@@ -21,7 +21,6 @@ Gem::Specification.new do |s|
   s.add_dependency "cap_git_tools", "~> 0.9.1"
   s.add_dependency "git", "~> 1.2.5"
   s.add_dependency "mail", "~> 2.5.4"
-  s.add_dependency "octokit", "~> 2.1.0"
   s.add_dependency "rails_config", "~> 0.3.2"
   s.add_dependency "capistrano", "~> 2.15.5"
   s.add_dependency "rvm-capistrano", "~> 1.5.0"
