@@ -1,3 +1,8 @@
+[![Build Status](https://travis-ci.org/NYULibraries/nyulibraries_deploy.png?branch=master)](https://travis-ci.org/NYULibraries/nyulibraries_deploy)
+[![Dependency Status](https://gemnasium.com/NYULibraries/nyulibraries_deploy.png)](https://gemnasium.com/NYULibraries/nyulibraries_deploy)
+[![Code Climate](https://codeclimate.com/github/NYULibraries/nyulibraries_deploy.png)](https://codeclimate.com/github/NYULibraries/nyulibraries_deploy)
+[![Coverage Status](https://coveralls.io/repos/NYULibraries/nyulibraries_deploy/badge.png)](https://coveralls.io/r/NYULibraries/nyulibraries_deploy)
+
 # NYULibraries Deploy
 
 NYULibraries Deploy offers a set of common rake tasks for the NYU libraries, as well as a set of common

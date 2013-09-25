@@ -3,7 +3,7 @@ module NyuLibraries
   module Deploy
     describe PumaConfig, "#initialize" do
       def dummy_path
-        @dummy_path ||= File.expand_path("../../dummy", __FILE__)
+        @dummy_path ||= File.expand_path("../../../dummy", __FILE__)
       end
     
       it "returns correct settings based on config" do
