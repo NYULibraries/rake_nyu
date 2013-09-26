@@ -18,7 +18,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rake", "~> 10.1.0"
   s.add_dependency "require_all", "~> 1.3.1"
-  s.add_dependency "rails", "~> 3.2.14"
   s.add_dependency "cap_git_tools", "~> 0.9.1"
   s.add_dependency "git", "~> 1.2.5"
   s.add_dependency "mail", "~> 2.5.4"
