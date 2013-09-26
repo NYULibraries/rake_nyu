@@ -24,7 +24,7 @@ module NyuLibraries
           yaml = YAML.load_file(NewRelicManager.newrelic_file)
           yaml.class.should eq Hash
           yaml["common"]["license_key"].should eq "dummykey"
-          yaml["common"]["app_name"].should eq "RakeNyuDummy"
+          yaml["common"]["app_name"].should eq "NyuLibrariesDummyApplication"
         end
       end
     
