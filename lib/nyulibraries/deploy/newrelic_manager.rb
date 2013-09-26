@@ -2,7 +2,6 @@ module NyuLibraries
   module Deploy
     require 'yaml'
     require 'erb'
-    require 'rails'
     require 'fileutils'
     module NewRelicManager
       # Back it up
@@ -25,12 +24,18 @@ module NyuLibraries
 
       # New Relic yaml file
       def self.newrelic_file
-        @newrelic_file ||= "#{Rails.root}/config/newrelic.yml"
+        @newrelic_file ||= "#{root}/config/newrelic.yml"
       end
 
       # ERB'd YAML with ERB parsed
       def self.yaml_with_erb_parsed
         @yaml ||= YAML.load(ERB.new(File.read(newrelic_file)).result).to_yaml
+      end
+
+      # We only use New Relic for Rails at the moment
+      def self.root
+        raise RuntimeError.new("New Relic is only available for Rails apps at the moment") unless defined?(::Rails)
+        @root ||= Rails.root
       end
     end
   end

@@ -1,22 +1,28 @@
 module NyuLibraries
   module Deploy
     class PumaConfig
-      attr_reader :port
+      attr_reader :port, :root, :env
 
       def initialize(*args)
         @port = args.shift
+        # If we're using Rails, use the Rails root, otherwise use the arg
+        @root = (defined?(::Rails)) ? Rails.root : args.shift
+        raise RuntimeError.new("You need to tell me the root of your Puma app") if @root.nil?
+        # If we're using Rails, use the Rails env, otherwise use the arg
+        @env = (defined?(::Rails)) ? Rails.env : args.shift
+        raise RuntimeError.new("You need to tell me the environment of your Puma app") if @env.nil?
       end
 
       def scripts_path
-        @scripts_path ||= "#{Rails.root}/config/deploy/puma"
+        @scripts_path ||= "#{root}/config/deploy/puma"
       end
 
       def pid
-        @pid ||= "#{Rails.root}/tmp/pids/puma-#{port}.pid"
+        @pid ||= "#{root}/tmp/pids/puma-#{port}.pid"
       end
 
       def log
-        @log ||= "#{Rails.root}/log/puma-#{Rails.env}-#{port}.log"
+        @log ||= "#{root}/log/puma-#{env}-#{port}.log"
       end
 
       def bind
@@ -33,7 +39,7 @@ module NyuLibraries
 
       # Start command
       def start_cmd
-        @start_cmd ||= "cd #{Rails.root} && RAILS_ENV=#{Rails.env} bundle exec #{start_file} && echo 'Starting' >> #{log}"
+        @start_cmd ||= "cd #{root} && RAILS_ENV=#{env} bundle exec #{start_file} && echo 'Starting' >> #{log}"
       end
 
       # Stop command
@@ -43,14 +49,14 @@ module NyuLibraries
 
       # Restart command
       def restart_cmd
-        @restart_cmd ||= "cd #{Rails.root} && RAILS_ENV=#{Rails.env} bundle exec #{restart_file}"
+        @restart_cmd ||= "cd #{root} && RAILS_ENV=#{env} bundle exec #{restart_file}"
       end
 
       # Start script code
       def start_script
         @start_script ||= %Q(
           #!/bin/bash
-          puma -b #{bind} -e #{Rails.env} -t 2:4 --pidfile #{pid} >> #{log} 2>&1 &
+          puma -b #{bind} -e #{env} -t 2:4 --pidfile #{pid} >> #{log} 2>&1 &
           exit
         ).strip
       end

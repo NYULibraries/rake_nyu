@@ -2,7 +2,7 @@
 require 'coveralls'
 Coveralls.wear!
 # Include the lib directory in the load path
-$: <<  File.dirname(__FILE__)+'/../lib'
+$: <<  "#{File.dirname(__FILE__)}/../lib"
 require 'nyulibraries_deploy'
 
 # Mock for Rails
@@ -10,7 +10,7 @@ require 'nyulibraries_deploy'
 # overkill to load an entire Rails app.
 module Rails
   def self.root
-    File.dirname(__FILE__)+'/dummy'
+    "#{File.dirname(__FILE__)}/dummy"
   end
   
   def self.env
