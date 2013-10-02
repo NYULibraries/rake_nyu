@@ -4,7 +4,7 @@ namespace :nyulibraries do
       desc "Set the New Relic file with ERB parsed"
       task :set => :backup  do |task|
         # Load up the Rails environment
-        Rake::Deploy::Task[:environment].invoke
+        Rake::Task[:environment].invoke
         NyuLibraries::Deploy::NewRelicManager.rewrite_with_settings
       end
     
