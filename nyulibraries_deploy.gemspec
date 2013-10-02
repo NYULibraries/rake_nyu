@@ -15,10 +15,11 @@ Gem::Specification.new do |s|
 
   s.files = Dir["lib/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
 
-  s.add_dependency "rake", "~> 10.0.4"
-  s.add_dependency "require_all", "~> 1.2.1"
+  s.add_dependency "rake", "~> 10.1.0"
+  s.add_dependency "require_all", "~> 1.3.0"
   s.add_dependency "rails", "~> 3.2.13"
   s.add_development_dependency "rspec", "~> 2.14.0"
+  s.add_development_dependency "pry"
   
   s.add_dependency "cap_git_tools", "~> 0.9.1"
   s.add_dependency "git", "~> 1.2.5"

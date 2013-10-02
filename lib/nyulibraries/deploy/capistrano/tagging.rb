@@ -57,11 +57,13 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
     
     def git_io link
+      short_link = link
       run "curl -i http://git.io -F \"url=#{link}\"" do |channel, stream, data|
         if data.include? "Location:"
-          data.scan(/Location:\s+(.*)/).last.first
+          short_link = data.scan(/Location:\s+(.*)/).last.first
         end
-      end 
+      end
+      return short_link
     end
     
     def git_compare
