@@ -90,16 +90,13 @@ Capistrano::Configuration.instance(:must_exist).load do
       else
         logger.info "ignored git tagging in #{fetch(:rails_env, fetch(:stage, 'staging'))} environment"
       end
-      run_locally "git stash pop; true"
     end
 
     desc "Make sure branch is checked out and up to date before tagging"
     task :checkout_branch do
-      run_locally "git checkout -b #{revision}; true"
-      run_locally "git stash; true"
-      run_locally "git checkout .; true"
+      run_locally "git fetch --all; true"
       run_locally "git checkout #{revision}; true"
-      run_locally "git pull origin #{revision}; true"
+      run_locally "git reset --hard origin/#{revision}; true"
     end
     
     desc "Create release tag in local and origin repo"
