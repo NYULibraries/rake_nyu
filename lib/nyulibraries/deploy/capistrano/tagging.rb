@@ -59,7 +59,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     def git_io link
       run "curl -i http://git.io -F \"url=#{link}\"" do |channel, stream, data|
         if data.include? "Location:"
-          return data.scan(/Location:\s+(.*)/).last.first
+          data.scan(/Location:\s+(.*)/).last.first
         end
       end 
     end
