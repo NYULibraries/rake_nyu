@@ -1,9 +1,11 @@
 require 'capistrano'
 require 'git'
 require 'mail'
+require 'thor'
+require 'net/http'
 
 Capistrano::Configuration.instance(:must_exist).load do
-  before 'deploy:cleanup',  'tagging:deploy'
+  on :exit,  'tagging:deploy'
   before 'tagging:deploy',  'tagging:checkout_branch'
   after  'tagging:deploy',  'tagging:send_diff'
 
@@ -56,12 +58,8 @@ Capistrano::Configuration.instance(:must_exist).load do
       git
     end
     
-    def git_io link
-      run "curl -i http://git.io -F \"url=#{link}\"" do |channel, stream, data|
-        if data.include? "Location:"
-          return data.scan(/Location:\s+(.*)/).last.first
-        end
-      end 
+    def git_io url
+      Net::HTTP.post_form(URI.parse("http://git.io/"), {:url => url})['location']
     end
     
     def git_compare
