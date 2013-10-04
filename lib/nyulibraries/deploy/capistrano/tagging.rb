@@ -1,9 +1,11 @@
 require 'capistrano'
 require 'git'
 require 'mail'
+require 'thor'
+require 'net/http'
 
 Capistrano::Configuration.instance(:must_exist).load do
-  before 'deploy:cleanup',  'tagging:deploy'
+  on :exit,  'tagging:deploy'
   before 'tagging:deploy',  'tagging:checkout_branch'
   after  'tagging:deploy',  'tagging:send_diff'
 
@@ -56,12 +58,8 @@ Capistrano::Configuration.instance(:must_exist).load do
       git
     end
     
-    def git_io link
-      run "curl -i http://git.io -F \"url=#{link}\"" do |channel, stream, data|
-        if data.include? "Location:"
-          return data.scan(/Location:\s+(.*)/).last.first
-        end
-      end 
+    def git_io url
+      Net::HTTP.post_form(URI.parse("http://git.io/"), {:url => url})['location']
     end
     
     def git_compare
@@ -90,16 +88,13 @@ Capistrano::Configuration.instance(:must_exist).load do
       else
         logger.info "ignored git tagging in #{fetch(:rails_env, fetch(:stage, 'staging'))} environment"
       end
-      run_locally "git stash pop; true"
     end
 
     desc "Make sure branch is checked out and up to date before tagging"
     task :checkout_branch do
-      run_locally "git checkout -b #{revision}; true"
-      run_locally "git stash; true"
-      run_locally "git checkout .; true"
+      run_locally "git fetch --all; true"
       run_locally "git checkout #{revision}; true"
-      run_locally "git pull origin #{revision}; true"
+      run_locally "git reset --hard origin/#{revision}; true"
     end
     
     desc "Create release tag in local and origin repo"
