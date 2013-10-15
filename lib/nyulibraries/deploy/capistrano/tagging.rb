@@ -5,7 +5,7 @@ require 'thor'
 require 'net/http'
 
 Capistrano::Configuration.instance(:must_exist).load do
-  on :exit,  'tagging:deploy'
+  before 'deploy:cleanup',  'tagging:deploy'
   before 'tagging:deploy',  'tagging:checkout_branch'
   after  'tagging:deploy',  'tagging:send_diff'
 
