@@ -43,6 +43,8 @@ Capistrano::Configuration.instance(:must_exist).load do
   # Bundler vars
   _cset :bundle_without, [:development, :test]
   
+  # Precompile vars
   _cset :assets_gem, ["nyulibraries_assets.git"]
+  _cset :force_precompile, false
 
 end

@@ -12,14 +12,15 @@ Capistrano::Configuration.instance(:must_exist).load do
       
       desc "Precompiles if assets have been changed"
       task :precompile, :roles => :web, :except => { :no_release => true } do
-        force_compile = false
+        force_compile = fetch(:force_precompile, false)
         changed_asset_count = 0
         rails_env = "RAILS_ENV=#{fetch(:rails_env, fetch(:stage, fetch(:default_stage, 'staging')))}"
         rails_group = "RAILS_GROUP=assets"
         begin
           from = source.next_revision(current_revision)
           asset_locations = 'app/assets/ lib/assets vendor/assets'
-          changed_asset_count = capture("cd #{fetch :latest_release} && #{source.local.log(from)} #{asset_locations} | wc -l").to_i
+          scm_log = (fetch(:scm, "") == :git) ? "git log #{from}" : source.local.log(from)
+          changed_asset_count = capture("cd #{fetch :latest_release} && #{scm_log} #{asset_locations} | wc -l").to_i
           fetch(:assets_gem, []).each do |gem_name|
             changed_asset_count += changed_gem_assets gem_name
           end
