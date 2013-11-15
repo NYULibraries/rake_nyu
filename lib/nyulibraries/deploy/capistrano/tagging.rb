@@ -4,7 +4,7 @@ require 'mail'
 require 'thor'
 require 'net/http'
 
-Capistrano::Configuration.instance(:must_exist).load do
+# Capistrano::Configuration.instance(:must_exist).load do
   before 'deploy:cleanup',  'tagging:deploy'
   before 'tagging:deploy',  'tagging:checkout_branch'
   after  'tagging:deploy',  'tagging:send_diff'
@@ -123,4 +123,4 @@ Capistrano::Configuration.instance(:must_exist).load do
       end
     end
   end
-end
+# end

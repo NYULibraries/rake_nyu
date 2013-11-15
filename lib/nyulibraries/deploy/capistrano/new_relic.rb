@@ -1,7 +1,7 @@
 # Include New Relic recipes
 require 'new_relic/recipes'
 
-Capistrano::Configuration.instance(:must_exist).load do
+# Capistrano::Configuration.instance(:must_exist).load do
   before  "newrelic:notice_deployment", "newrelic:set"
   # After newrelic runs, reset up its yaml file
   after   "newrelic:notice_deployment", "newrelic:reset"
@@ -28,4 +28,4 @@ Capistrano::Configuration.instance(:must_exist).load do
       end
     end
   end
-end
+# end

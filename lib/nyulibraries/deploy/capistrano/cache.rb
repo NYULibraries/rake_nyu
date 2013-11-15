@@ -1,4 +1,4 @@
-Capistrano::Configuration.instance(:must_exist).load do
+# Capistrano::Configuration.instance(:must_exist).load do
   after "deploy", "deploy:cleanup", "cache:tmp_clear"
   
   namespace :cache do
@@ -7,4 +7,4 @@ Capistrano::Configuration.instance(:must_exist).load do
       run "cd #{current_release} && RAILS_ENV=#{fetch(:rails_env, 'staging')} bundle exec rake tmp:clear"
     end
   end
-end
+# end

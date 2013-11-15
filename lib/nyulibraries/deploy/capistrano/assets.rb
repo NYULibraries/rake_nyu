@@ -1,6 +1,6 @@
 require 'bundler'
 
-Capistrano::Configuration.instance(:must_exist).load do
+# Capistrano::Configuration.instance(:must_exist).load do
   before 'deploy:finalize_update', 'deploy:assets:symlink'
   
   namespace :deploy do
@@ -46,4 +46,4 @@ Capistrano::Configuration.instance(:must_exist).load do
       end
     end
   end
-end
+# end
