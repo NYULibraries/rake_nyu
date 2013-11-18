@@ -3,7 +3,6 @@ require 'git'
 require 'mail'
 require 'thor'
 require 'net/http'
-require 'pry'
 
 # Capistrano::Configuration.instance(:must_exist).load do
   before 'deploy:cleanup',  'tagging:deploy'
@@ -12,8 +11,8 @@ require 'pry'
     desc "Make sure branch is checked out and up to date before tagging"
     task :checkout_branch do
       sh "git fetch --all; true"
-      sh "git checkout #{fetch :revision}; true"
-      sh "git reset --hard origin/#{fetch :revision}; true"
+      sh "git checkout #{fetch :previous_revision}; true"
+      sh "git reset --hard origin/#{fetch :previous_revision}; true"
     end
     
     desc "Create release tag in local and origin repo"

@@ -35,7 +35,6 @@
     task :see do
       invoke "rails_config:set_variables" unless fetch(:app_settings)
       $stdout.puts "Variables are set."
-      # require 'pry';pry
       
       # invoke "rails_config:set_serves" unless find_servers
       # $stdout.puts "Servers are set."

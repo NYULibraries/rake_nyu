@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency "sshkit", '~> 1.1.0'
   s.add_dependency "git", "~> 1.2.5"
   s.add_dependency "mail", "~> 2.5.4"
-  s.add_dependency "rvm-capistrano", "~> 1.5.0"
+  # s.add_dependency "rvm-capistrano", "~> 1.5.0"
   s.add_dependency "newrelic_rpm", "~> 3.6.0"
 
   s.add_development_dependency "rspec", "~> 2.14.0"
