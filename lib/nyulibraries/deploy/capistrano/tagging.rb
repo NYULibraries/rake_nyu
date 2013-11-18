@@ -3,13 +3,44 @@ require 'git'
 require 'mail'
 require 'thor'
 require 'net/http'
+require 'pry'
 
 # Capistrano::Configuration.instance(:must_exist).load do
   before 'deploy:cleanup',  'tagging:deploy'
-  before 'tagging:deploy',  'tagging:checkout_branch'
-  after  'tagging:deploy',  'tagging:send_diff'
 
   namespace :tagging do
+    desc "Make sure branch is checked out and up to date before tagging"
+    task :checkout_branch do
+      sh "git fetch --all; true"
+      sh "git checkout #{fetch :revision}; true"
+      sh "git reset --hard origin/#{fetch :revision}; true"
+    end
+    
+    desc "Create release tag in local and origin repo"
+    task :deploy do
+      create_tag
+    end
+    
+    desc "Sends git diff"
+    task :send_diff do
+      if tagging_environment?
+        mail_setup
+        mail = Mail.new
+        mail[:from]     = 'no-reply@library.nyu.edu'
+        mail[:body]     = git_compare
+        mail[:subject]  = "Recent changes for #{fetch(:app_title, 'this project')}"
+        mail[:to]       = fetch(:recipient, "")
+        begin
+          mail.deliver! unless mail[:to].to_s.empty?
+          logger.info mail[:to].to_s.empty? ? "Diff not sent, recipient not found. Be sure to `set :recipient, 'you@host.tld'`" : "Diff sent to #{mail[:to]}"
+        rescue
+          logger.info "Could not send mail."
+          logger.info "#{mail}"
+        end
+      else
+        logger.info "ignored send diff in #{fetch(:rails_env, fetch(:stage, 'staging'))} environment"
+      end
+    end
     
     def current_tag
       @current_tag ||= fetch(:current_tag, "")
@@ -90,37 +121,9 @@ require 'net/http'
       end
     end
 
-    desc "Make sure branch is checked out and up to date before tagging"
-    task :checkout_branch do
-      run_locally "git fetch --all; true"
-      run_locally "git checkout #{revision}; true"
-      run_locally "git reset --hard origin/#{revision}; true"
-    end
     
-    desc "Create release tag in local and origin repo"
-    task :deploy do
-      create_tag
-    end
-    
-    desc "Sends git diff"
-    task :send_diff do
-      if tagging_environment?
-        mail_setup
-        mail = Mail.new
-        mail[:from]     = 'no-reply@library.nyu.edu'
-        mail[:body]     = git_compare
-        mail[:subject]  = "Recent changes for #{fetch(:app_title, 'this project')}"
-        mail[:to]       = fetch(:recipient, "")
-        begin
-          mail.deliver! unless mail[:to].to_s.empty?
-          logger.info mail[:to].to_s.empty? ? "Diff not sent, recipient not found. Be sure to `set :recipient, 'you@host.tld'`" : "Diff sent to #{mail[:to]}"
-        rescue
-          logger.info "Could not send mail."
-          logger.info "#{mail}"
-        end
-      else
-        logger.info "ignored send diff in #{fetch(:rails_env, fetch(:stage, 'staging'))} environment"
-      end
-    end
   end
+  
+  before 'tagging:deploy',  'tagging:checkout_branch'
+  after  'tagging:deploy',  'tagging:send_diff'
 # end

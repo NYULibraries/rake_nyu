@@ -17,7 +17,8 @@ Gem::Specification.new do |s|
   s.files = Dir["lib/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
 
   s.add_dependency "rake", "~> 10.1.0"
-  s.add_dependency "capistrano", '~> 3.0.1'
+  # s.add_dependency "capistrano", '~> 3.0.1'
+  s.add_dependency "sshkit", '~> 1.1.0'
   s.add_dependency "git", "~> 1.2.5"
   s.add_dependency "mail", "~> 2.5.4"
   s.add_dependency "rvm-capistrano", "~> 1.5.0"
