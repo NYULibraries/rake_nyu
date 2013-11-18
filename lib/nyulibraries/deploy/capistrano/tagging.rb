@@ -12,7 +12,7 @@ require 'net/http'
     task :checkout_branch do
       sh "git fetch --all; true"
       sh "git checkout #{fetch :previous_revision}; true"
-      sh "git reset --hard origin/#{fetch :previous_revision}; true"
+      sh "git reset --hard origin/HEAD; true"
     end
     
     desc "Create release tag in local and origin repo"
@@ -31,13 +31,13 @@ require 'net/http'
         mail[:to]       = fetch(:recipient, "")
         begin
           mail.deliver! unless mail[:to].to_s.empty?
-          logger.info mail[:to].to_s.empty? ? "Diff not sent, recipient not found. Be sure to `set :recipient, 'you@host.tld'`" : "Diff sent to #{mail[:to]}"
+          $stdout.puts mail[:to].to_s.empty? ? "Diff not sent, recipient not found. Be sure to `set :recipient, 'you@host.tld'`" : "Diff sent to #{mail[:to]}"
         rescue
-          logger.info "Could not send mail."
-          logger.info "#{mail}"
+          $stdout.puts "Could not send mail."
+          $stdout.puts "#{mail}"
         end
       else
-        logger.info "ignored send diff in #{fetch(:rails_env, fetch(:stage, 'staging'))} environment"
+        $stdout.puts "ignored send diff in #{fetch(:rails_env, fetch(:stage, 'staging'))} environment"
       end
     end
     
@@ -113,10 +113,10 @@ require 'net/http'
 
     def create_tag
       if tagging_environment?
-        run_locally "git tag #{current_tag} #{revision} -m \"Deployed by #{user_name} <#{user_email}>\"; true"
-        run_locally "git push #{remote} refs/tags/#{current_tag}:refs/tags/#{current_tag}; true"
+        sh "git tag #{current_tag} #{fetch :previous_revision} -m \"Deployed by #{user_name} <#{user_email}>\"; true"
+        sh "git push #{remote} refs/tags/#{current_tag}:refs/tags/#{current_tag}; true"
       else
-        logger.info "ignored git tagging in #{fetch(:rails_env, fetch(:stage, 'staging'))} environment"
+        $stdout.puts "ignored git tagging in #{fetch(:rails_env, fetch(:stage, 'staging'))} environment"
       end
     end
 

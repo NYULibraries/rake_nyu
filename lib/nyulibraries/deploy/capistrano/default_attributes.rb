@@ -25,8 +25,11 @@
   set(:repository, -> {"git@github.com:NYULibraries/#{fetch :app_title}.git"})
   
   # Git Tagging vars
-  set(:current_tag, -> {"#{fetch :stage}_#{fetch(:releases).last}"})
-  set(:previous_tag, -> {"#{fetch :stage}_#{fetch(:releases)[-2]}"})
+  set(:current_tag, -> {"#{fetch :stage}_#{release_path.to_s.gsub(releases_path.to_s+'/','')}"})
+  set(:previous_tag, -> {
+      invoke "deploy:last_release_path"
+      "#{fetch :stage}_#{release_path.to_s.gsub(releases_path.to_s+'/','')}"
+    })
   set :tagging_remote, 'origin'
   set :tagging_environments, ["production"]
   
