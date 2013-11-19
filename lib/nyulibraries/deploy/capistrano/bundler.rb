@@ -20,3 +20,5 @@
 #     fetch(:bundle_cleaning_environments).collect {|environment| environment.to_sym}.include?(fetch(:stage, fetch(:rails_env, :staging)).to_sym)
 #   end
 # # end
+require 'capistrano/bundler'
+before 'deploy:updated', 'bundler:install'
