@@ -7,3 +7,4 @@ gemspec
 
 gem "coveralls", "~> 0.7.0", require: false, group: :test
 gem "capistrano", :github => "capistrano/capistrano"
+gem "capistrano-bundler", :github => "hab278/bundler"

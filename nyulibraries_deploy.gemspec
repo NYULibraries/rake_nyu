@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency "mail", "~> 2.5.4"
   # s.add_dependency "rvm-capistrano", "~> 1.5.0"
   s.add_dependency "newrelic_rpm", "~> 3.6.0"
-  s.add_dependency "capistrano-bundler", "~> 1.0.0"
+  # s.add_dependency "capistrano-bundler", "~> 1.0.0"
 
   s.add_development_dependency "rspec", "~> 2.14.0"
   s.add_development_dependency "pry", "~> 0.9.12.2"

@@ -21,4 +21,3 @@
 #   end
 # # end
 require 'capistrano/bundler'
-before 'deploy:updated', 'bundler:install'

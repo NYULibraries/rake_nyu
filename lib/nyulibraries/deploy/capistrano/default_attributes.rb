@@ -44,8 +44,14 @@
   set :new_relic_environments, ["production"]
   
   # Bundler vars
-  set :bundle_without, [:development, :test]
-  set :bundle_cleaning_environments, ["staging", "development"]
+  # set :bundle_without, [:development, :test]
+  # set :bundle_cleaning_environments, ["staging", "development"]
+  set :bundle_gemfile, -> { release_path.join('Gemfile') }
+  set :bundle_dir, -> { shared_path.join('bundle') }
+  set :bundle_flags, '--deployment'
+  set :bundle_without, %w{development test}.join(' ')
+  set :bundle_binstubs, -> { shared_path.join('bin') }
+  set :bundle_roles, :all
   
   # Precompile vars
   set :assets_gem, ["nyulibraries_assets.git"]
