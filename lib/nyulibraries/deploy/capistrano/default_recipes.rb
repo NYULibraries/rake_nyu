@@ -1,11 +1,9 @@
-# Set up multistage.
-require_relative 'multistage'
 # Overrideable defaults.
 require_relative 'default_attributes'
 # The rails config recipe loads up all our application specific settings from a settings.yaml
-require_relative 'rails_config'
+require_relative 'server_config'
 # This loads a recipe for precompiling assets, this specific one only precompiles if there are any changes.
-require_relative 'assets'
+# require_relative 'rails/assets'
 # The bundler recipe sets up a bundler environment with ruby.
 require_relative 'bundler'
 # The rvm recipe sets up an rvm environment with ruby.
@@ -17,4 +15,4 @@ require_relative 'server/passenger'
 # Custom Capistrano tagging
 require_relative 'tagging'
 # This recipe clears the cache.
-require_relative 'cache'
+# require_relative 'rails/cache'

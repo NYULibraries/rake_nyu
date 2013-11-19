@@ -4,24 +4,35 @@ require 'mail'
 require 'thor'
 require 'net/http'
 
-# Capistrano::Configuration.instance(:must_exist).load do
-  before 'deploy:cleanup',  'tagging:deploy'
+# Capistrano::Configuration.instance(:must_exist).load do  # 
+  # before 'deploy:cleanup',  'tagging:deploy'
 
   namespace :tagging do
     desc "Make sure branch is checked out and up to date before tagging"
     task :checkout_branch do
-      sh "git fetch --all; true"
-      sh "git checkout #{fetch :previous_revision}; true"
-      sh "git reset --hard origin/HEAD; true"
+      puts "TASK:\ttagging:checkout_branch  =>  Checking out git repo for tagging."
+      if tagging_environment?
+        sh "git fetch --all; true"
+        sh "git checkout #{fetch :previous_revision}; true"
+        sh "git reset --hard origin/HEAD; true"
+      else
+        puts "Ignoring checking out branch in this environment."
+      end
     end
     
     desc "Create release tag in local and origin repo"
     task :deploy do
-      create_tag
+      puts "TASK:\ttagging:deploy  =>  Creating tags on Git repo."
+      if tagging_environment?
+        create_tag
+      else
+        puts "Ignoring tagging in this environment."
+      end
     end
     
     desc "Sends git diff"
     task :send_diff do
+      puts "TASK:\ttagging:send_diff  =>  Sending diff on Git tags."
       if tagging_environment?
         mail_setup
         mail = Mail.new
@@ -31,13 +42,13 @@ require 'net/http'
         mail[:to]       = fetch(:recipient, "")
         begin
           mail.deliver! unless mail[:to].to_s.empty?
-          $stdout.puts mail[:to].to_s.empty? ? "Diff not sent, recipient not found. Be sure to `set :recipient, 'you@host.tld'`" : "Diff sent to #{mail[:to]}"
+          puts mail[:to].to_s.empty? ? "Diff not sent, recipient not found. Be sure to `set :recipient, 'you@host.tld'`" : "Diff sent to #{mail[:to]}"
         rescue
-          $stdout.puts "Could not send mail."
-          $stdout.puts "#{mail}"
+          puts "Could not send mail."
+          puts "#{mail}"
         end
       else
-        $stdout.puts "ignored send diff in #{fetch(:rails_env, fetch(:stage, 'staging'))} environment"
+        puts "Ignored send diff in #{fetch(:rails_env, fetch(:stage, 'staging'))} environment"
       end
     end
     
@@ -116,13 +127,17 @@ require 'net/http'
         sh "git tag #{current_tag} #{fetch :previous_revision} -m \"Deployed by #{user_name} <#{user_email}>\"; true"
         sh "git push #{remote} refs/tags/#{current_tag}:refs/tags/#{current_tag}; true"
       else
-        $stdout.puts "ignored git tagging in #{fetch(:rails_env, fetch(:stage, 'staging'))} environment"
+        puts "ignored git tagging in #{fetch(:rails_env, fetch(:stage, 'staging'))} environment"
       end
     end
 
     
   end
+  # 
+  # before 'tagging:deploy',  'tagging:checkout_branch'
+  # after  'tagging:deploy',  'tagging:send_diff'
   
-  before 'tagging:deploy',  'tagging:checkout_branch'
-  after  'tagging:deploy',  'tagging:send_diff'
+  before  'tagging:deploy',   'tagging:checkout_branch'
+  after   'tagging:deploy',   'tagging:send_diff'
+  after   'deploy:finished',  'tagging:deploy'
 # end

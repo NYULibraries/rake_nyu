@@ -1,7 +1,8 @@
 require 'bundler'
 
 # Capistrano::Configuration.instance(:must_exist).load do
-  before 'deploy:finalize_update', 'deploy:assets:symlink'
+  # before 'deploy:finalize_update', 'deploy:assets:symlink'
+  before 'deploy:updated', 'deploy:assets:symlink'
   
   namespace :deploy do
     namespace :assets do
@@ -11,7 +12,8 @@ require 'bundler'
       end
       
       desc "Precompiles if assets have been changed"
-      task :precompile, :roles => :web, :except => { :no_release => true } do
+      task :precompile do
+        on roles( :all, exclude: :no_release ) do |host|
         force_compile = fetch(:force_precompile, false)
         changed_asset_count = 0
         rails_env = "RAILS_ENV=#{fetch(:rails_env, fetch(:stage, fetch(:default_stage, 'staging')))}"
@@ -25,24 +27,27 @@ require 'bundler'
             changed_asset_count += changed_gem_assets gem_name
           end
         rescue Exception => e
-          logger.info "Error: #{e}, forcing precompile"
+          puts "Error: #{e}, forcing precompile"
           force_compile = true
         end
         if changed_asset_count > 0 || force_compile
-          logger.info "#{changed_asset_count} assets have changed. Pre-compiling"
+          puts "#{changed_asset_count} assets have changed. Pre-compiling"
           run ("cd #{latest_release} && #{rails_env} #{rails_group} bundle exec rake assets:clean")
           run ("cd #{latest_release} && #{rails_env} #{rails_group} bundle exec rake assets:precompile")
         else
-          logger.info "#{changed_asset_count} assets have changed. Skipping asset pre-compilation"
+          puts "#{changed_asset_count} assets have changed. Skipping asset pre-compilation"
         end
+      end
       end
 
       desc "Creates a symlink for assets"
-      task :symlink, roles: :web do
+      task :symlink do
+        on roles(:all) do
         run ("rm -rf #{fetch :current_release}/public/assets &&
               mkdir -p #{fetch :current_release}/public &&
               mkdir -p #{fetch :shared_path}/assets &&
               ln -s #{fetch :shared_path}/assets #{fetch :current_release}/public/assets")
+            end
       end
     end
   end
