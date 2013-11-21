@@ -1,0 +1,31 @@
+namespace :bundler do
+  desc <<-DESC
+        Clear rails cache
+    DESC
+  task :clean do
+    on roles fetch(:bundle_roles) do
+      within release_path do
+        execute :bundle, "clean"
+      end
+    end
+  end
+  
+  task :c do
+    puts ( fetch ( :bundle_gemfile ) )
+    puts ( fetch ( :bundle_dir ) )
+    puts ( fetch ( :bundle_flags ) )
+    puts ( fetch ( :bundle_without ) )
+    puts ( fetch ( :bundle_binstubs ) )
+    puts ( fetch ( :bundle_roles ) )
+  end
+  
+  def bundle_cleaning_environments?
+    return true if fetch(:bundle_cleaning_environments).nil?
+    fetch(:bundle_cleaning_environments).collect {|environment| environment.to_sym}.include?(fetch(:stage, fetch(:rails_env, :staging)).to_sym)
+  end
+  
+  # after "bundle:install", "deploy:migrate"
+  after "bundler:install", "bundler:clean"
+  before "bundler:install", "bundler:c"
+end
+

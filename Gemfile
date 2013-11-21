@@ -6,3 +6,9 @@ source "http://rubygems.org"
 gemspec
 
 gem "coveralls", "~> 0.7.0", require: false, group: :test
+
+gem "sshkit", :git => "git@github.com:kirs/sshkit.git", :branch => "command-map"
+gem "ruby-debug"
+# gem "capistrano", :git => "git://github.com/capistrano/capistrano.git"
+# gem "capistrano-bundler", :git => "git://github.com/capistrano/bundler.git"
+# gem "capistrano-rvm", :git => "git://github.com/capistrano/rvm.git" :branch => "sshkit-prefixes"

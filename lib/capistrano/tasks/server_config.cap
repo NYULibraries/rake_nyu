@@ -1,0 +1,49 @@
+namespace :server_config do
+  desc <<-DESC
+        Set config variables.
+    DESC
+  task :set_variables do
+    puts "Setting app settings and variables."
+    # set(:app_settings, -> { eval(run_locally("rails runner -e #{fetch(:rails_env, 'staging')} 'p Settings.capistrano.to_hash'")) })
+    # run_locally do
+    #   execute "rails runner -e #{fetch(:rails_env, 'staging')} 'p Settings.capistrano.to_hash'"
+    # end
+    set(:scm_username, ->  { fetch(:app_settings)[:scm_username]} )
+    set(:app_path, ->  { fetch(:app_settings)[:path]} )
+    set(:user, ->  { fetch(:app_settings)[:user]} )
+    set(:puma_ports, ->  { fetch(:app_settings)[:puma_ports]} )
+    set(:deploy_to, -> { "#{fetch :app_path}#{fetch :application}"})
+  end
+
+  desc <<-DESC
+        Set servers.
+    DESC
+  task :set_servers do
+    puts "Setting the server."
+    server "#{fetch(:app_settings)[:servers].first}", :app, :web, :db, :primary => true
+    fetch(:app_settings)[:servers].slice(1, fetch(:app_settings)[:servers].length-1).each do |host|
+      server "#{host}", :app, :web
+    end
+  end
+
+  desc <<-DESC
+        See settings.
+    DESC
+  task :see do
+    invoke "server_config:set_variables" unless fetch(:app_settings)
+    puts "Variables are set."
+    puts "Printing out variables."
+    
+    puts "Settings: #{fetch :app_settings}"
+    puts "SCM Username: #{fetch :scm_username}"
+    puts "App Path: #{fetch :app_path}"
+    puts "User: #{fetch :user}"
+    puts "Deploy To: #{fetch :deploy_to}"
+    puts "Current path: #{current_path}"
+    puts "Puma ports: #{fetch :puma_ports}"
+    # p "Servers: #{find_servers}"
+  end
+  
+  
+  before 'deploy:started', 'server_config:see'
+end

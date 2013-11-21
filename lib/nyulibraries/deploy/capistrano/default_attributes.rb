@@ -1,51 +1,60 @@
-Capistrano::Configuration.instance(:must_exist).load do
+# Capistrano::Configuration.instance(:must_exist).load do
   # Hack on Capistrano, Capistrnao requires :repository to be set, and thus is always set with garbage value.
-  # This makes it impossible to detect wether or not the user set it, so unsetting here solves that.
+  # This makes it impossible to detect wether or not the user set it, so deleteting here solves that.
   # Also, we re-set it here anyway, so it's safe thus far...
-  unset :repository
-  unset :application
+  delete :repository
+  delete :application
   
   # SSH options
-  _cset :ssh_options, {:forward_agent => true}
+  set :ssh_options, {:forward_agent => true}
   
   # Git vars
-  _cset :scm, :git
-  _cset :deploy_via, :remote_cache
-  _cset :branch, 'development'
-  _cset :git_enable_submodules, 1
+  set :scm, :git
+  set :deploy_via, :remote_cache
+  set :branch, 'development'
+  set :git_enable_submodules, 1
   
   # Environments
-  _cset :stages, ["staging", "production"]
-  _cset :default_stage, "staging"
-  _cset :keep_releases, 5
-  _cset :use_sudo, false
+  set :stages, ["staging", "production"]
+  set :default_stage, "staging"
+  set :keep_releases, 5
+  set :use_sudo, false
   
   # Application specs
-  _cset(:application) {"#{fetch :app_title}_repos"}
-  _cset(:repository) {"git@github.com:NYULibraries/#{fetch :app_title}.git"}
+  set(:application, -> {"#{fetch :app_title}_repos"})
+  set(:repository, -> {"git@github.com:NYULibraries/#{fetch :app_title}.git"})
   
   # Git Tagging vars
-  _cset(:current_tag) {"#{fetch :stage}_#{fetch(:releases).last}"}
-  _cset(:previous_tag) {"#{fetch :stage}_#{fetch(:releases)[-2]}"}
-  _cset :tagging_remote, 'origin'
-  _cset :tagging_environments, ["production"]
+  set(:current_tag, -> {"#{fetch :stage}_#{release_path.to_s.gsub(releases_path.to_s+'/','')}"})
+  set(:previous_tag, -> {
+      invoke "deploy:last_release_path"
+      "#{fetch :stage}_#{release_path.to_s.gsub(releases_path.to_s+'/','')}"
+    })
+  set :tagging_remote, 'origin'
+  set :tagging_environments, ["production"]
   
   # RVM  vars
-  _cset :rvm_ruby_string, "ruby-1.9.3-p448"
-  _cset :rvm_type, :user
+  set :rvm_ruby_string, "ruby-1.9.3-p448"
+  set :rvm_type, :user
   
   # Rails specific vars
-  _cset :normalize_asset_timestamps, false
+  set :normalize_asset_timestamps, false
   
   # New Relic vars
-  _cset :new_relic_environments, ["production"]
+  set :new_relic_environments, ["production"]
   
   # Bundler vars
-  _cset :bundle_without, [:development, :test]
-  _cset :bundle_cleaning_environments, ["staging", "development"]
+  # set :bundle_without, [:development, :test]
+  # set :bundle_cleaning_environments, ["staging", "development"]
+  set :bundle_gemfile, -> { release_path.join('Gemfile') }
+  set :bundle_dir, -> { shared_path.join('bundle') }
+  set :bundle_flags, '--deployment'
+  set :bundle_without, %w{development test}.join(' ')
+  set :bundle_binstubs, -> { shared_path.join('bin') }
+  set :bundle_roles, :all
   
   # Precompile vars
-  _cset :assets_gem, ["nyulibraries_assets.git"]
-  _cset :force_precompile, false
+  set :assets_gem, ["nyulibraries_assets.git"]
+  set :force_precompile, false
 
-end
+# end
