@@ -11,9 +11,9 @@ namespace :tagging do
   task :checkout_branch do
     puts "TASK:\ttagging:checkout_branch  =>  Checking out git repo for tagging."
     if tagging_environment?
-      sh "git fetch --all; true"
-      sh "git checkout #{fetch :previous_revision}; true"
-      sh "git reset --hard origin/HEAD; true"
+      # sh "git fetch --all; true"
+      # sh "git checkout #{fetch :previous_revision}; true"
+      # sh "git reset --hard origin/HEAD; true"
     else
       puts "Ignoring checking out branch in this environment."
     end
@@ -45,6 +45,7 @@ namespace :tagging do
       mail[:to]       = fetch(:recipient, "")
       begin
         mail.deliver! unless mail[:to].to_s.empty?
+        puts mail[:body]
         puts mail[:to].to_s.empty? ? "Diff not sent, recipient not found. Be sure to `set :recipient, 'you@host.tld'`" : "Diff sent to #{mail[:to]}"
       rescue
         puts "Could not send mail."

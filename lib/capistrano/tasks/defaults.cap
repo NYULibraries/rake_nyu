@@ -30,9 +30,13 @@ namespace :load do
 
     # Git Tagging vars
     set(:current_tag, -> {"#{fetch :stage}_#{release_path.to_s.gsub(releases_path.to_s+'/','')}"})
+
     set(:previous_tag, -> {
-        invoke "deploy:last_release_path"
-        "#{fetch :stage}_#{release_path.to_s.gsub(releases_path.to_s+'/','')}"
+        on roles :all do
+          releases = (capture :ls, "-xr", releases_path).split
+          set(:previous_release, releases.size > 1 ? releases[1] : "")
+        end
+        "#{fetch :stage}_#{fetch :previous_release}"
       })
     set :tagging_remote, 'origin'
     set :tagging_environments, ["production"]

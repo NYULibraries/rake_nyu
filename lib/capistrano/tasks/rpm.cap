@@ -1,0 +1,74 @@
+namespace :newrelic do
+
+  # on all deployments, notify New Relic
+  desc <<-DESC
+        Record a deployment in New Relic (newrelic.com)
+    DESC
+  task :notice_deployment do#, :roles => :all, :except => {:no_release => true } do
+    rails_env = fetch(:newrelic_rails_env, fetch(:rails_env, "staging"))
+
+    require 'newrelic_rpm'#'/new_relic/cli/command'
+    require 'new_relic/cli/command'
+    # 
+    begin
+    #   # allow overrides to be defined for revision, description, changelog, appname, and user
+      rev         = fetch(:newrelic_revision)
+      description = fetch(:newrelic_desc)    
+      changelog   = fetch(:newrelic_changelog)
+      appname     = fetch(:newrelic_appname)   
+      user        = fetch(:newrelic_user)     
+      license_key = fetch(:newrelic_license_key)
+    
+      unless scm == :none
+        changelog = lookup_changelog(changelog)
+        rev       = lookup_rev(rev)
+      end
+      
+      require 'pry'; binding.pry    
+      new_revision = rev
+      deploy_options = {
+        :environment => rails_env,
+        :revision    => new_revision,
+        :changelog   => changelog,
+        :description => description,
+        :appname     => appname,
+        :user        => user,
+        :license_key => license_key
+      }
+    # 
+      puts "Uploading deployment to New Relic"
+      deployment = NewRelic::Cli::Deployments.new deploy_options
+      deployment.run
+      puts "Uploaded deployment information to New Relic"
+    
+    rescue NewRelic::Cli::Command::CommandFailure => e
+      puts e.message
+    rescue => e
+      puts "Unable to notify New Relic of the deployment... skipping \n#{e}"
+    rescue => e
+      puts "Error creating New Relic deployment (#{e})\n#{e.backtrace.join("\n")}"
+    end
+
+    # WIP: For rollbacks, let's update the deployment we created with an indication of the failure:
+    # on_rollback do
+    #   run(...)
+    # end
+  end
+
+  def lookup_changelog(changelog)
+    !changelog ? revision_log_message : changelog
+  end
+
+  def lookup_rev(rev)
+    if rev.nil?
+      on roles :all do
+        within repo_path do  
+          rev = capture(:git, "rev-list HEAD").chomp.split(/\n/)[0..(fetch(:keep_releases, 5)-1)]
+        end
+      end
+    end
+    rev
+  end
+  
+  after "deploy:finished", "newrelic:notice_deployment"
+end
