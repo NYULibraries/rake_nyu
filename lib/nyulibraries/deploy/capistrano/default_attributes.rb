@@ -47,5 +47,6 @@ Capistrano::Configuration.instance(:must_exist).load do
   # Precompile vars
   _cset :assets_gem, ["nyulibraries_assets.git"]
   _cset :force_precompile, false
+  _cset :ignore_precompile, false
 
 end
