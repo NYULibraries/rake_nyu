@@ -11,7 +11,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       end
       
       desc "Precompiles if assets have been changed"
-      task :precompile, :roles => :web, :except => { :no_release => true } do
+      task :precompile, :roles => :web, :max_hosts => 1, :except => { :no_release => true } do
         force_compile = fetch(:force_precompile, false)
         changed_asset_count = 0
         rails_env = "RAILS_ENV=#{fetch(:rails_env, fetch(:stage, fetch(:default_stage, 'staging')))}"
