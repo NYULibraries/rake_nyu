@@ -30,8 +30,13 @@ Capistrano::Configuration.instance(:must_exist).load do
         end
         if (changed_asset_count > 0 || force_compile) && !fetch(:ignore_precompile, false)
           logger.info "#{changed_asset_count} assets have changed. Pre-compiling"
-          run ("cd #{latest_release} && #{rails_env} #{rails_group} bundle exec rake assets:clean")
-          run ("cd #{latest_release} && #{rails_env} #{rails_group} bundle exec rake assets:precompile")
+          run_locally ("bundle exec rake assets:clean")
+          run_locally ("bundle exec rake assets:precompile")
+          run_locally "cd public && tar -jcf assets.tar.bz2 assets"
+          top.upload "public/assets.tar.bz2", "#{shared_path}", :via => :scp
+          run "cd #{shared_path} && tar -jxf assets.tar.bz2 && rm assets.tar.bz2"
+          run_locally "rm public/assets.tar.bz2"
+          run_locally("rake assets:clean")
         else
           logger.info "#{changed_asset_count} assets have changed. Skipping asset pre-compilation"
         end
