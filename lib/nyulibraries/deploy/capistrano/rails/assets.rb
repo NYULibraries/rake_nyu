@@ -51,4 +51,8 @@ require 'bundler'
       end
     end
   end
+<<<<<<< HEAD:lib/nyulibraries/deploy/capistrano/rails/assets.rb
 # end
+=======
+end
+>>>>>>> 9c29e35c7494b9ef2f24b9ffefab2cd86143e483:lib/nyulibraries/deploy/capistrano/assets.rb

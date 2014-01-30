@@ -17,7 +17,7 @@
   # Environments
   set :stages, ["staging", "production"]
   set :default_stage, "staging"
-  set :keep_releases, 5
+  set (:keep_releases, -> {fetch(:stage,"").eql?("production") ? 5 : 1})
   set :use_sudo, false
   
   # Application specs
@@ -54,7 +54,6 @@
   set :bundle_roles, :all
   
   # Precompile vars
-  set :assets_gem, ["nyulibraries_assets.git"]
+  set :assets_gem, ["nyulibraries-assets.git", "nyulibraries_assets.git"]
   set :force_precompile, false
-
-# end
+  set :ignore_precompile, false
