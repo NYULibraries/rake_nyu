@@ -12,22 +12,23 @@ Gem::Specification.new do |s|
   s.homepage    = "https://github.com/NYULibraries/nyulibraries_deploy"
   s.summary     = "Common deploy tasks for the NYU Libraries."
   s.description = "Common deploy tasks for the NYU Libraries."
+  s.license     = 'MIT'
 
   s.files = Dir["lib/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
+
 
   s.add_dependency "rake", "~> 10.0.4"
   s.add_dependency "require_all", "~> 1.2.1"
   s.add_dependency "rails", "~> 3.2.13"
   s.add_development_dependency "rspec", "~> 2.14.0"
   s.add_development_dependency "pry"
-  
   s.add_dependency "cap_git_tools", "~> 0.9.1"
   s.add_dependency "git", "~> 1.2.5"
   s.add_dependency "mail", "~> 2.5.4"
-  s.add_dependency "octokit", "~> 1.25.0"
-  s.add_dependency "rails_config", "~> 0.3.2"
   s.add_dependency "capistrano", "~> 2.15.5"
-  s.add_dependency "rvm-capistrano", "~> 1.4.0"
-  s.add_dependency "newrelic_rpm", "~> 3.6.0"
-  s.add_dependency "rails_config", "~> 0.3.2"
+  s.add_dependency "rvm-capistrano", "~> 1.5.0"
+  s.add_dependency "newrelic_rpm", "~> 3.6"
+
+  s.add_development_dependency "rspec", "~> 2.14.0"
+  s.add_development_dependency "pry", "~> 0.9.12.2"
 end
