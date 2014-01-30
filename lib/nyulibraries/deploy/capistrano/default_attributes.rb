@@ -17,7 +17,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   # Environments
   _cset :stages, ["staging", "production"]
   _cset :default_stage, "staging"
-  _cset :keep_releases, 5
+  _cset(:keep_releases) {fetch(:stage,"").eql?("production") ? 5 : 1}
   _cset :use_sudo, false
   
   # Application specs
@@ -45,7 +45,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   _cset :bundle_cleaning_environments, ["staging", "development"]
   
   # Precompile vars
-  _cset :assets_gem, ["nyulibraries_assets.git"]
+  _cset :assets_gem, ["nyulibraries-assets.git", "nyulibraries_assets.git"]
   _cset :force_precompile, false
   _cset :ignore_precompile, false
 
