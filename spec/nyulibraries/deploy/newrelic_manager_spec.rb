@@ -1,4 +1,4 @@
-module NyuLibraries
+module Nyulibraries
   module Deploy
     require 'spec_helper'
     describe NewRelicManager do
@@ -24,7 +24,7 @@ module NyuLibraries
           yaml = YAML.load_file(NewRelicManager.newrelic_file)
           yaml.class.should eq Hash
           yaml["common"]["license_key"].should eq "dummykey"
-          yaml["common"]["app_name"].should eq "NyuLibrariesDummyApplication"
+          yaml["common"]["app_name"].should eq "NyulibrariesDummyApplication"
         end
       end
     

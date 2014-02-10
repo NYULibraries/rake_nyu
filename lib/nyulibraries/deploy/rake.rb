@@ -1,4 +1,4 @@
-module NyuLibraries
+module Nyulibraries
   module Deploy
     require_relative 'newrelic_manager'
     require_relative 'puma_config'

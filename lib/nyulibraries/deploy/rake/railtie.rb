@@ -1,4 +1,4 @@
-module NyuLibraries
+module Nyulibraries
   module Deploy
     if defined?(::Rails) && ::Rails.version >= '3.1.0'
       class Railtie < Rails::Railtie
@@ -21,7 +21,7 @@ module NyuLibraries
         end
       end
       # Install tasks
-      NyuLibraries::Deploy::TaskInstaller.install_tasks
+      Nyulibraries::Deploy::TaskInstaller.install_tasks
     end
   end
 end
