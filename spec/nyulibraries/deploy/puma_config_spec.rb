@@ -1,5 +1,5 @@
 require 'spec_helper'
-module NyuLibraries
+module Nyulibraries
   module Deploy
     describe PumaConfig, "#initialize" do
       def dummy_path

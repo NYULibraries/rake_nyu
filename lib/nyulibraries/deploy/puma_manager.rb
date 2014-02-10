@@ -1,4 +1,4 @@
-module NyuLibraries
+module Nyulibraries
   module Deploy
     module PumaManager
 
