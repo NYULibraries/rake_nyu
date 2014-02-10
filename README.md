@@ -1,7 +1,7 @@
-[![Build Status](https://travis-ci.org/NYULibraries/nyulibraries_deploy.png?branch=master)](https://travis-ci.org/NYULibraries/nyulibraries_deploy)
-[![Dependency Status](https://gemnasium.com/NYULibraries/nyulibraries_deploy.png)](https://gemnasium.com/NYULibraries/nyulibraries_deploy)
-[![Code Climate](https://codeclimate.com/github/NYULibraries/nyulibraries_deploy.png)](https://codeclimate.com/github/NYULibraries/nyulibraries_deploy)
-[![Coverage Status](https://coveralls.io/repos/NYULibraries/nyulibraries_deploy/badge.png)](https://coveralls.io/r/NYULibraries/nyulibraries_deploy)
+[![Build Status](https://travis-ci.org/NYULibraries/nyulibraries-deploy.png?branch=master)](https://travis-ci.org/NYULibraries/nyulibraries-deploy)
+[![Dependency Status](https://gemnasium.com/NYULibraries/nyulibraries-deploy.png)](https://gemnasium.com/NYULibraries/nyulibraries-deploy)
+[![Code Climate](https://codeclimate.com/github/NYULibraries/nyulibraries-deploy.png)](https://codeclimate.com/github/NYULibraries/nyulibraries-deploy)
+[![Coverage Status](https://coveralls.io/repos/NYULibraries/nyulibraries-deploy/badge.png)](https://coveralls.io/r/NYULibraries/nyulibraries-deploy)
 
 # NYULibraries Deploy
 
@@ -159,8 +159,8 @@ past defaults, but if there are small changes you can easily override them.
     # In your config/deploy.rb
     require 'nyulibraries/deploy/capistrano'
 
-This will load the [default attributes](https://github.com/NYULibraries/nyulibraries_deploy/blob/development-deploy/lib/nyulibraries/deploy/capistrano/default_attributes.rb),
-with a [default recipe](https://github.com/NYULibraries/nyulibraries_deploy/blob/development-deploy/lib/nyulibraries/deploy/capistrano/default_recipes.rb)
+This will load the [default attributes](https://github.com/NYULibraries/nyulibraries-deploy/blob/development-deploy/lib/nyulibraries/deploy/capistrano/default_attributes.rb),
+with a [default recipe](https://github.com/NYULibraries/nyulibraries-deploy/blob/development-deploy/lib/nyulibraries/deploy/capistrano/default_recipes.rb)
 that will use all of the above mentioned capistrano
 recipes with a passenger server. All you have to do is
 

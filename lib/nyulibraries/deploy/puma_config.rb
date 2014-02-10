@@ -1,4 +1,4 @@
-module NyuLibraries
+module Nyulibraries
   module Deploy
     class PumaConfig
       attr_reader :port, :root, :env
