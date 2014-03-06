@@ -28,7 +28,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     task :set_servers do
       if Figs::ENV.deploy_servers.is_a?(Array)
         Figs.env.deploy_servers.each_with_index do |deploy_server, index|
-          primary_flag = (index === 1)
+          primary_flag = (index === 0)
           server deploy_server, :app, :web, :db, primary: primary_flag
         end
       else
