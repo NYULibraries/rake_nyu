@@ -21,7 +21,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       set(:app_path, ENV['DEPLOY_PATH'])
       set(:user, ENV['DEPLOY_USER'])
       set(:puma_ports, Figs::ENV.puma_ports)
-      
+      set(:deploy_to)     {"#{fetch :app_path}#{fetch :application}"}
     end
 
     # desc "Set servers"
