@@ -21,14 +21,14 @@ Capistrano::Configuration.instance(:must_exist).load do
       set(:app_path, ENV['DEPLOY_PATH'])
       set(:user, ENV['DEPLOY_USER'])
       set(:puma_ports, Figs::ENV.puma_ports)
-      
+      set(:deploy_to)     {"#{fetch :app_path}#{fetch :application}"}
     end
 
     # desc "Set servers"
     task :set_servers do
       if Figs::ENV.deploy_servers.is_a?(Array)
         Figs.env.deploy_servers.each_with_index do |deploy_server, index|
-          primary_flag = (index === 1)
+          primary_flag = (index === 0)
           server deploy_server, :app, :web, :db, primary: primary_flag
         end
       else
