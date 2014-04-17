@@ -31,7 +31,7 @@ Capistrano::Configuration.instance(:must_exist).load do
         if (changed_asset_count > 0 || force_compile) && !fetch(:ignore_precompile, false)
           logger.info "#{changed_asset_count} assets have changed. Pre-compiling"
           run_locally ("bundle exec rake assets:clobber")
-          run_locally ("RAILS_ENV=#{rails_env} bundle exec rake assets:precompile")
+          run_locally ("#{rails_env} bundle exec rake assets:precompile")
           run_locally "cd public && tar -jcf assets.tar.bz2 assets"
           run "cd #{shared_path} && mv assets/manifest* #{previous_release}/assets_manifest.json || true"
           run "cd #{shared_path} && rm -rf assets && mkdir assets"
