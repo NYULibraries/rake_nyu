@@ -33,7 +33,7 @@ Capistrano::Configuration.instance(:must_exist).load do
           run_locally ("bundle exec rake assets:clean")
           run_locally ("bundle exec rake assets:precompile")
           run_locally "cd public && tar -jcf assets.tar.bz2 assets"
-          run "cd #{shared_path} && mv assets/manifest* #{previous_release}/assets_manifest.json"
+          run "cd #{shared_path} && mv assets/manifest* #{previous_release}/assets_manifest.json || true"
           top.upload "public/assets.tar.bz2", "#{shared_path}", :via => :scp
           run "cd #{shared_path} && tar -jxf assets.tar.bz2 && rm assets.tar.bz2"
           run_locally "rm public/assets.tar.bz2"
