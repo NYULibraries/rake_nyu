@@ -38,7 +38,7 @@ Capistrano::Configuration.instance(:must_exist).load do
           top.upload "public/assets.tar.bz2", "#{shared_path}", :via => :scp
           run "cd #{shared_path} && tar -jxf assets.tar.bz2 && rm assets.tar.bz2"
           run_locally "rm public/assets.tar.bz2"
-          run_locally("#{rails_env}\n bundle exec rake assets:clean")
+          run_locally("bundle exec rake assets:clean #{rails_env}")
         else
           logger.info "#{changed_asset_count} assets have changed. Skipping asset pre-compilation"
         end
