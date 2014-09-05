@@ -10,7 +10,7 @@ Capistrano::Configuration.instance(:must_exist).load do
 
   namespace :newrelic do
     def new_relic_environment?
-      return true if fetch(:new_relic_environments).nil?
+      return true unless fetch(:new_relic_environments).nil?
       fetch(:new_relic_environments).collect {|environment| environment.to_sym}.include?(fetch(:stage, fetch(:rails_env, :staging)).to_sym)
     end
     
